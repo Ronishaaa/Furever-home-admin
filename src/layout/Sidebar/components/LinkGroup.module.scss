@@ -1,0 +1,71 @@
+/* Sidebar Styling */
+.sidebar {
+  background-color: #ff7043;
+  color: #fff;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding-top: 60px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.link {
+  display: flex;
+  align-items: center;
+  padding: 10px 16px;
+  border-radius: 6px;
+  color: #fff;
+  font-size: 16px;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.link:hover {
+  background-color: #ffccbc;
+  color: #2f4f4f;
+}
+
+.link_active {
+  background-color: #ffccbc; /* Slightly lighter shade for active state */
+  color: #000000; /* Darker text color for active state */
+}
+
+.control {
+  display: block;
+  margin: 0 auto;
+  padding: 12px 16px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff; /* White text */
+  background-color: #ff7043; /* Matching the sidebar */
+  border-radius: 6px;
+  margin-bottom: 8px;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.control:hover {
+  background-color: #ffccbc; /* Light orange for hover effect */
+  color: #2f4f4f; /* Darker text color for hover */
+}
+
+.control_active {
+  background-color: #ffccbc; /* Slightly lighter shade for active state */
+  color: #2f4f4f; /* Darker text color for active state */
+}
+
+.chevron {
+  transition: transform 0.3s;
+}
+
+.chevron_active {
+  transform: rotate(180deg);
+}
+
+.chevron_inactive {
+  transform: rotate(0deg);
+}
+
+/* Adjustments for links within a collapse section */
+.collapse {
+  margin-top: 12px;
+}

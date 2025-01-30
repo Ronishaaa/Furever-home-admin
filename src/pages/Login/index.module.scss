@@ -1,0 +1,16 @@
+.wrapper {
+  background-image: url("/background.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+}
+
+.form {
+  min-height: 100vh;
+  max-width: 30%;
+}
