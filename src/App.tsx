@@ -1,7 +1,6 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Layout from "./layout";
-import { Login } from "./pages";
-import { Dashboard } from "./pages/Dashboard";
+import { AddPets, Dashboard, Login } from "./pages";
 import Pets from "./pages/Pets";
 
 const App = () => {
@@ -13,10 +12,10 @@ const App = () => {
         { index: true, element: <Dashboard /> },
 
         { path: "/pets", element: <Pets /> },
-        // {
-        //   path: "/pet/add-new-Pet",
-        //   element: <AddNewPet />,
-        // },
+        {
+          path: "/pets/add-pet",
+          element: <AddPets />,
+        },
       ],
     },
     { path: "/login", element: <Login /> },

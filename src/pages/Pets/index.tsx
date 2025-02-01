@@ -1,4 +1,5 @@
 import {
+  Button,
   Container,
   Flex,
   Image,
@@ -6,14 +7,17 @@ import {
   Menu,
   MenuItem,
   Table,
-  Text,
+  Title,
   UnstyledButton,
 } from "@mantine/core";
-import { BiDotsHorizontalRounded } from "react-icons/bi";
+import { BiDotsHorizontalRounded, BiPlus } from "react-icons/bi";
 import { TbDatabaseOff } from "react-icons/tb";
+import { useNavigate } from "react-router-dom";
 import { useGetPets } from "./queries";
 
-const PetDetails = () => {
+const Pets = () => {
+  const navigate = useNavigate();
+
   const { data, isLoading, isFetching } = useGetPets();
   console.log(data?.data);
 
@@ -40,7 +44,9 @@ const PetDetails = () => {
         <Table.Td>
           <Image
             radius="sm"
-            style={{ height: 20 }}
+            // style={{ height: 40 }}
+            fit="contain"
+            h={40}
             src={element.images[0]}
             alt={`${element.name}`}
             fallbackSrc="https://placehold.co/600x400?text=Placeholder"
@@ -75,21 +81,31 @@ const PetDetails = () => {
 
   return (
     <Container>
-      <Text size="xl" mb="md">
-        Pets
-      </Text>
+      <Flex justify="space-between" align="center" mb={24}>
+        <Title>Pets</Title>
+
+        <Button
+          onClick={() => navigate("/pets/add-pet")}
+          h={40}
+          w={155}
+          color="rgb(255, 112, 67)"
+          leftSection={<BiPlus size={18} />}
+        >
+          Add Pet
+        </Button>
+      </Flex>
 
       <Table striped highlightOnHover>
         <Table.Thead>
           <Table.Tr>
             <Table.Th>S.No</Table.Th>
-            <Table.Th />
-            <Table.Th>Pet Name</Table.Th>
+            <Table.Th>Image</Table.Th>
+            <Table.Th>Name</Table.Th>
             <Table.Th>Breed</Table.Th>
             <Table.Th>Age</Table.Th>
             <Table.Th>Gender</Table.Th>
             <Table.Th>Color</Table.Th>
-            <Table.Th>HealthCondition</Table.Th>
+            <Table.Th>Health Condition</Table.Th>
             <Table.Th>Vaccination</Table.Th>
             <Table.Th>Adoption Status</Table.Th>
             <Table.Th>Type</Table.Th>
@@ -120,4 +136,4 @@ const PetDetails = () => {
   );
 };
 
-export default PetDetails;
+export default Pets;

@@ -22,7 +22,7 @@ export function Sidebars() {
   };
 
   return (
-    <Box pos="relative" w={"100%"}>
+    <Box className={classes.container}>
       <Box
         px="md"
         pt={60}

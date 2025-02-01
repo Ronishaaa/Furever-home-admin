@@ -19,14 +19,12 @@ export const LinksGroup = ({
       <NavLink to={pathName} className={classes.link_container} end>
         {({ isActive }) => (
           <UnstyledButton
-            w="90%"
+            w="100%"
             className={isActive ? classes.control_active : classes.control}
           >
-            <Group justify="space-between">
-              <Group display="flex" align="center">
-                <IconType size={24} className="test" />
-                <Box ml="sm">{label}</Box>
-              </Group>
+            <Group display="flex" align="center">
+              <IconType size={24} className="test" />
+              <Box ml="sm">{label}</Box>
             </Group>
           </UnstyledButton>
         )}

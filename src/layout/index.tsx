@@ -4,7 +4,6 @@ import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { AuthContext } from "../contexts";
 import HeaderUI from "./Header";
 import { Sidebars } from "./Sidebar";
-import styles from "./index.module.scss";
 
 const Layout = () => {
   const { token } = useContext(AuthContext);
@@ -15,25 +14,21 @@ const Layout = () => {
   }
 
   return (
-    <AppShell
-      padding="md"
-      styles={{
-        main: {
-          minHeight: "100vh",
-        },
-      }}
-    >
-      <AppShell.Header zIndex={120} p={16}>
+    <AppShell padding="md">
+      <AppShell.Header
+        zIndex={120}
+        style={{
+          backgroundColor: "#FF7043",
+          color: "#ffffff",
+        }}
+      >
         <HeaderUI />
       </AppShell.Header>
 
-      <Box className={styles.sidebar}>
+      <Box>
         <AppShell.Navbar
           style={{
             backgroundColor: "#FF7043",
-            width: "20%",
-            height: "100%",
-            display: "flex",
           }}
         >
           <Sidebars />
@@ -42,10 +37,11 @@ const Layout = () => {
         <Box
           style={{
             backgroundColor: "#ffffff",
-            borderRadius: "8px",
-            flex: 1,
-            padding: "40px",
           }}
+          w="80%"
+          ml="auto"
+          mt={60}
+          p={40}
         >
           <Outlet />
         </Box>

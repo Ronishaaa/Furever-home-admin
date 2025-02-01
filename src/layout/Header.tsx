@@ -5,18 +5,7 @@ const HeaderUI = () => {
   const navigate = useNavigate();
 
   return (
-    <Group
-      h={56}
-      p="xs"
-      style={{
-        zIndex: 120,
-        backgroundColor: "#FF7043",
-        color: "#ffffff",
-      }}
-      display="flex"
-      align="center"
-      justify="space-between"
-    >
+    <Group h={56}>
       <Group
         display="flex"
         justify="space-between"
