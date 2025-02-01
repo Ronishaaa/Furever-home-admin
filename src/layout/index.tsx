@@ -4,6 +4,7 @@ import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { AuthContext } from "../contexts";
 import HeaderUI from "./Header";
 import { Sidebars } from "./Sidebar";
+import styles from "./index.module.scss";
 
 const Layout = () => {
   const { token } = useContext(AuthContext);
@@ -22,19 +23,11 @@ const Layout = () => {
         },
       }}
     >
-      <AppShell.Header zIndex={120}>
+      <AppShell.Header zIndex={120} p={16}>
         <HeaderUI />
       </AppShell.Header>
 
-      {/* Flex container for the sidebar and content */}
-      <Box
-        style={{
-          display: "flex",
-          height: "100vh",
-          flex: 1,
-        }}
-      >
-        {/* Sidebar */}
+      <Box className={styles.sidebar}>
         <AppShell.Navbar
           style={{
             backgroundColor: "#FF7043",

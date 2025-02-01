@@ -1,32 +1,77 @@
-import { Badge, Container, Table, Text } from "@mantine/core";
+import {
+  Container,
+  Flex,
+  Image,
+  LoadingOverlay,
+  Menu,
+  MenuItem,
+  Table,
+  Text,
+  UnstyledButton,
+} from "@mantine/core";
+import { BiDotsHorizontalRounded } from "react-icons/bi";
+import { TbDatabaseOff } from "react-icons/tb";
+import { useGetPets } from "./queries";
 
 const PetDetails = () => {
-  const pets = [
-    {
-      name: "Bella",
-      breed: "Labrador",
-      age: 3,
-      gender: "Female",
-      color: "Yellow",
-      healthCondition: "Healthy",
-      vaccination: "Up to Date",
-      adoptionStatus: "Available",
-      type: "Dog",
-      image: "/dog.jpg",
-    },
-    {
-      name: "Mittens",
-      breed: "Siamese",
-      age: 2,
-      gender: "Male",
-      color: "Gray",
-      healthCondition: "Healthy",
-      vaccination: "Not Vaccinated",
-      adoptionStatus: "Adopted",
-      type: "Cat",
-      image: "/cat.jpg",
-    },
-  ];
+  const { data, isLoading, isFetching } = useGetPets();
+  console.log(data?.data);
+
+  const rows = data?.data.map(
+    (
+      element: {
+        id: number;
+        name: string;
+        adoptionStatus: string;
+        age: number;
+        breed: string;
+        color: string;
+        gender: "Male";
+        healthCondition: string;
+        type: string;
+        vaccination: boolean;
+        images: string[];
+      },
+      index: number
+    ) => (
+      <Table.Tr key={element.id}>
+        <Table.Td w={230}>{index + 1}</Table.Td>
+
+        <Table.Td>
+          <Image
+            radius="sm"
+            style={{ height: 20 }}
+            src={element.images[0]}
+            alt={`${element.name}`}
+            fallbackSrc="https://placehold.co/600x400?text=Placeholder"
+          />
+        </Table.Td>
+        <Table.Td w={230}>{element.name}</Table.Td>
+        <Table.Td w={230}>{element.breed}</Table.Td>
+        <Table.Td w={230}>{element.age}</Table.Td>
+        <Table.Td w={230}>{element.gender}</Table.Td>
+        <Table.Td w={230}>{element.color}</Table.Td>
+        <Table.Td w={230}>{element.healthCondition}</Table.Td>
+        <Table.Td w={230}>{element.vaccination}</Table.Td>
+        <Table.Td w={230}>{element.adoptionStatus}</Table.Td>
+        <Table.Td w={230}>{element.type}</Table.Td>
+        <Table.Td w={54}>
+          <Menu offset={1}>
+            <Menu.Target>
+              <UnstyledButton>
+                <BiDotsHorizontalRounded onClick={() => {}} />
+              </UnstyledButton>
+            </Menu.Target>
+
+            <Menu.Dropdown>
+              <MenuItem>Edit</MenuItem>
+              <MenuItem c="red">Delete</MenuItem>
+            </Menu.Dropdown>
+          </Menu>
+        </Table.Td>
+      </Table.Tr>
+    )
+  );
 
   return (
     <Container>
@@ -38,6 +83,7 @@ const PetDetails = () => {
         <Table.Thead>
           <Table.Tr>
             <Table.Th>S.No</Table.Th>
+            <Table.Th />
             <Table.Th>Pet Name</Table.Th>
             <Table.Th>Breed</Table.Th>
             <Table.Th>Age</Table.Th>
@@ -50,27 +96,24 @@ const PetDetails = () => {
             <Table.Th />
           </Table.Tr>
         </Table.Thead>
-        <Table.Tbody>
-          {pets.map((pet, idx) => (
-            <Table.Tr key={idx}>
-              <Table.Td>{idx + 1}</Table.Td>
-              <Table.Td>{pet.name}</Table.Td>
-              <Table.Td>{pet.breed}</Table.Td>
-              <Table.Td>{pet.age} years</Table.Td>
-              <Table.Td>{pet.gender}</Table.Td>
-              <Table.Td>{pet.color}</Table.Td>
-              <Table.Td>{pet.healthCondition}</Table.Td>
-              <Table.Td>{pet.vaccination}</Table.Td>
-              <Table.Td>
-                <Badge
-                  color={pet.adoptionStatus === "Adopted" ? "green" : "yellow"}
-                >
-                  {pet.adoptionStatus}
-                </Badge>
+        <Table.Tbody pos="relative">
+          <LoadingOverlay
+            h={600}
+            visible={isLoading || isFetching}
+            zIndex={1000}
+          />
+          {rows?.length > 0 ? (
+            rows
+          ) : (
+            <Table.Tr>
+              <Table.Td colSpan={5}>
+                <Flex direction="column" align="center">
+                  <TbDatabaseOff size={24} />
+                  No records to show
+                </Flex>
               </Table.Td>
-              <Table.Td>{pet.type}</Table.Td>
             </Table.Tr>
-          ))}
+          )}
         </Table.Tbody>
       </Table>
     </Container>
