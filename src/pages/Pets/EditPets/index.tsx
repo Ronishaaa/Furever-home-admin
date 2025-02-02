@@ -2,7 +2,6 @@ import {
   Box,
   Button,
   Checkbox,
-  Container,
   Flex,
   Group,
   Image,
@@ -22,52 +21,82 @@ import { Notifications } from "@mantine/notifications";
 import { zodResolver } from "mantine-form-zod-resolver";
 import { useEffect, useState } from "react";
 import { BiImageAdd, BiLeftArrowAlt, BiX } from "react-icons/bi";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { AddPet } from "../../../types";
-import { useAddPet, useUploadImage } from "../queries";
+import { useGetUniquePets, useUpdatePet, useUploadImage } from "../queries";
 import { petSchema } from "../schema";
 
-export const AddPets = () => {
+export const EditPets = () => {
+  const { id } = useParams();
   const navigate = useNavigate();
 
   const [showCancelModal, { open: openCancelModal, close: closeCancelModal }] =
     useDisclosure(false);
 
-  const [droppedImages, setDroppedImages] = useState<string[]>([]);
+  const {
+    data,
+    isSuccess,
+    isLoading: petDataLoading,
+  } = useGetUniquePets(id, Boolean(id));
 
-  const { getInputProps, setFieldValue, onSubmit, isDirty, setFieldError } =
-    useForm({
-      initialValues: {
-        name: "",
-        adoptionStatus: "",
-        age: 0,
-        breed: "",
-        color: "",
-        gender: "",
-        healthCondition: "",
-        type: "",
-        vaccination: false,
-        images: [] as string[],
-      },
-      validate: zodResolver(petSchema),
-    });
+  const { mutate: updatePet, isSuccess: updatedPet } = useUpdatePet();
 
-  const { mutate: addPetMutation, isSuccess, error } = useAddPet();
   const { mutateAsync: uploadImage } = useUploadImage();
 
-  const addPet = async (values: AddPet) => {
-    addPetMutation(values);
+  const [droppedImages, setDroppedImages] = useState<string[]>([]);
+
+  const {
+    getInputProps,
+    setFieldValue,
+    setInitialValues,
+    onSubmit,
+    isDirty,
+    reset,
+  } = useForm({
+    initialValues: {
+      name: "",
+      adoptionStatus: "",
+      age: 0,
+      breed: "",
+      color: "",
+      gender: "",
+      healthCondition: "",
+      type: "",
+      vaccination: false,
+      images: droppedImages,
+    },
+    validate: zodResolver(petSchema),
+  });
+
+  useEffect(() => {
+    if (isSuccess && data) {
+      setInitialValues({
+        ...data.data,
+      });
+      setDroppedImages(data?.data?.images);
+      reset(); // reset the form state after updating initial values
+    }
+  }, [data, isSuccess, reset, setInitialValues]);
+
+  const handleSubmit = (values: AddPet) => {
+    const validId: string | undefined = id ? id : undefined;
+
+    if (validId) {
+      updatePet({
+        id: validId,
+        values: values,
+      });
+    }
   };
 
   useEffect(() => {
-    if (isSuccess) {
+    if (updatedPet) {
       Notifications.show({
-        title: "Added Successfully",
-        message: "Pet added successfully 😊",
+        title: "Updated Successfully",
+        message: "Pet updated successfully 😊",
       });
-      navigate(-1);
     }
-  }, [error, isSuccess, setFieldError, navigate]);
+  }, [updatedPet]);
 
   const cancelData = () => {
     if (isDirty()) {
@@ -76,7 +105,6 @@ export const AddPets = () => {
       navigate(-1);
     }
   };
-
   const handleDrop = async (acceptedFiles: File[]) => {
     try {
       const result = await uploadImage(acceptedFiles);
@@ -103,16 +131,16 @@ export const AddPets = () => {
   };
 
   return (
-    <Container>
-      <LoadingOverlay />
-      <form onSubmit={onSubmit(addPet)}>
+    <Box w={{ lg: 736 }} mx="auto">
+      <LoadingOverlay visible={petDataLoading} zIndex={1000} />
+      <form onSubmit={onSubmit(handleSubmit)}>
         <Flex justify="space-between" align="center" mb={32}>
           <Group>
             <Button size="sm" variant="outline" onClick={cancelData}>
               <BiLeftArrowAlt size={20} />
             </Button>
 
-            <Title order={2}>Add New Pet</Title>
+            <Title order={2}>Edit Pet</Title>
           </Group>
 
           <Group>
@@ -120,7 +148,7 @@ export const AddPets = () => {
               Cancel
             </Button>
 
-            <Button h={40} type="submit" color="rgb(255, 112, 67)">
+            <Button h={40} type="submit">
               Save changes
             </Button>
           </Group>
@@ -178,7 +206,7 @@ export const AddPets = () => {
           maxSize={1 * 1024 ** 2}
           multiple
         >
-          {droppedImages.length > 0 ? (
+          {(droppedImages || []).length > 0 ? (
             <Flex wrap="wrap" gap={2}>
               {droppedImages.map((src, index) => (
                 <Box key={index} pos="relative">
@@ -223,7 +251,7 @@ export const AddPets = () => {
         >
           <Stack>
             <Text my={14}>
-              Leaving this page will cancel all the unsaved changes.
+              Leaving this page will delete all the unsaved changes.
             </Text>
 
             <Group justify="end">
@@ -238,6 +266,6 @@ export const AddPets = () => {
           </Stack>
         </Modal>
       </form>
-    </Container>
+    </Box>
   );
 };

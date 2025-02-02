@@ -24,7 +24,7 @@ export const useAddPet = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["Get-Pets"] });
-      navigate(-1);
+      navigate("/pets");
     },
   });
 };
@@ -39,8 +39,48 @@ export const useUploadImage = () => {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
-      console.log("Upload API Response:", data); // Debugging log
-      return data; // Ensure this contains `{ images: [{ uri: "..." }] }`
+      return data;
     },
+  });
+};
+
+export const useDelPet = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (id: string) => {
+      const { data } = await axios.delete(`/pets/${id}`);
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["Get-Pets"] });
+    },
+  });
+};
+
+export const useUpdatePet = () => {
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
+
+  return useMutation({
+    mutationFn: async ({ id, values }: { id: string; values: AddPet }) => {
+      const { data } = await axios.patch(`/pets/${id}`, values);
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["Get-Pets"] });
+      navigate(-1);
+    },
+  });
+};
+
+export const useGetUniquePets = (id: string | undefined, enabled: boolean) => {
+  return useQuery({
+    queryKey: ["Get-one-pets", id],
+    queryFn: async () => {
+      const { data } = await axios.get(`/pets/${id}`);
+      return data;
+    },
+    enabled,
   });
 };

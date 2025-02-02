@@ -2,29 +2,50 @@ import {
   Button,
   Container,
   Flex,
+  Group,
   Image,
   LoadingOverlay,
   Menu,
   MenuItem,
+  Modal,
+  Stack,
   Table,
   Title,
   UnstyledButton,
 } from "@mantine/core";
+import { useDisclosure } from "@mantine/hooks";
+import { Notifications } from "@mantine/notifications";
+import { useState } from "react";
 import { BiDotsHorizontalRounded, BiPlus } from "react-icons/bi";
 import { TbDatabaseOff } from "react-icons/tb";
 import { useNavigate } from "react-router-dom";
-import { useGetPets } from "./queries";
+import { useDelPet, useGetPets } from "./queries";
 
 const Pets = () => {
   const navigate = useNavigate();
-
   const { data, isLoading, isFetching } = useGetPets();
   console.log(data?.data);
+
+  const [selectedPet, setSelectedPet] = useState("");
+
+  const { mutate: deletePetMutate } = useDelPet();
+
+  const [showDeleteModal, { open: openDeleteModal, close: closeDeleteModal }] =
+    useDisclosure(false);
+
+  const deletePet = () => {
+    closeDeleteModal();
+    deletePetMutate(selectedPet ?? 0);
+    Notifications.show({
+      title: "Deleted Successfully",
+      message: "Pet deleted successfully 😊",
+    });
+  };
 
   const rows = data?.data.map(
     (
       element: {
-        id: number;
+        id: string;
         name: string;
         adoptionStatus: string;
         age: number;
@@ -44,7 +65,6 @@ const Pets = () => {
         <Table.Td>
           <Image
             radius="sm"
-            // style={{ height: 40 }}
             fit="contain"
             h={40}
             src={element.images[0]}
@@ -65,13 +85,23 @@ const Pets = () => {
           <Menu offset={1}>
             <Menu.Target>
               <UnstyledButton>
-                <BiDotsHorizontalRounded onClick={() => {}} />
+                <BiDotsHorizontalRounded
+                  onClick={() => {
+                    setSelectedPet(element.id);
+                  }}
+                />
               </UnstyledButton>
             </Menu.Target>
 
             <Menu.Dropdown>
-              <MenuItem>Edit</MenuItem>
-              <MenuItem c="red">Delete</MenuItem>
+              <MenuItem
+                onClick={() => navigate(`/pets/edit-pet/${element.id}`)}
+              >
+                Edit
+              </MenuItem>
+              <MenuItem c="red" onClick={openDeleteModal}>
+                Delete
+              </MenuItem>
             </Menu.Dropdown>
           </Menu>
         </Table.Td>
@@ -132,6 +162,27 @@ const Pets = () => {
           )}
         </Table.Tbody>
       </Table>
+      <Modal
+        opened={showDeleteModal}
+        onClose={closeDeleteModal}
+        title="Delete this Pet?"
+        centered
+      >
+        <Stack>
+          <div>
+            This action will permanently delete the selected pet. You can’t undo
+            this action.
+          </div>
+          <Group justify="end">
+            <Button variant="outline" onClick={closeDeleteModal}>
+              Cancel
+            </Button>
+            <Button onClick={deletePet} color="red">
+              Yes, delete
+            </Button>
+          </Group>
+        </Stack>
+      </Modal>
     </Container>
   );
 };
