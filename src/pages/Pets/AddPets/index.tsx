@@ -65,7 +65,7 @@ export const AddPets = () => {
         title: "Added Successfully",
         message: "Pet added successfully 😊",
       });
-      navigate(-1);
+      navigate("/pets");
     }
   }, [error, isSuccess, setFieldError, navigate]);
 

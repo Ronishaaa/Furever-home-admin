@@ -77,7 +77,7 @@ const Pets = () => {
         <Table.Td w={230}>{element.gender}</Table.Td>
         <Table.Td w={230}>{element.color}</Table.Td>
         <Table.Td w={230}>{element.healthCondition}</Table.Td>
-        <Table.Td w={230}>{element.vaccination}</Table.Td>
+        <Table.Td w={230}>{element.vaccination ? "yes" : "no"}</Table.Td>
         <Table.Td w={230}>{element.adoptionStatus}</Table.Td>
         <Table.Td w={230}>{element.type}</Table.Td>
         <Table.Td w={54}>
