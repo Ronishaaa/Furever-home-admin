@@ -24,7 +24,6 @@ import { useDelPet, useGetPets } from "./queries";
 const Pets = () => {
   const navigate = useNavigate();
   const { data, isLoading, isFetching } = useGetPets();
-  console.log(data?.data);
 
   const [selectedPet, setSelectedPet] = useState("");
 

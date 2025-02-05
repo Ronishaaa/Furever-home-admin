@@ -71,9 +71,9 @@ export const EditPets = () => {
   useEffect(() => {
     if (isSuccess && data) {
       setInitialValues({
-        ...data.data,
+        ...data.pet,
       });
-      setDroppedImages(data?.data?.images);
+      setDroppedImages(data?.pet?.images);
       reset(); // reset the form state after updating initial values
     }
   }, [data, isSuccess, reset, setInitialValues]);
