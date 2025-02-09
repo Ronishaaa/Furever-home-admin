@@ -8,6 +8,7 @@ import {
   Menu,
   MenuItem,
   Modal,
+  Pill,
   Stack,
   Table,
   Title,
@@ -73,13 +74,33 @@ const Pets = () => {
         </Table.Td>
         <Table.Td w={230}>{element.name}</Table.Td>
         <Table.Td w={230}>{element.breed}</Table.Td>
-        <Table.Td w={230}>{element.age}</Table.Td>
+        <Table.Td w={50}>{element.age}</Table.Td>
         <Table.Td w={230}>{element.gender}</Table.Td>
         <Table.Td w={230}>{element.color}</Table.Td>
-        <Table.Td w={230}>{element.healthCondition}</Table.Td>
-        <Table.Td w={230}>{element.vaccination ? "yes" : "no"}</Table.Td>
-        <Table.Td w={230}>{element.adoptionStatus}</Table.Td>
-        <Table.Td w={230}>{element.type}</Table.Td>
+        <Table.Td w={1000}>{element.healthCondition}</Table.Td>
+        <Table.Td w={230} align="center">
+          {element.vaccination ? (
+            <Pill style={{ backgroundColor: "#008000", color: "#ffffff" }}>
+              Yes
+            </Pill>
+          ) : (
+            <Pill style={{ backgroundColor: "#FF0000", color: "#ffffff" }}>
+              No
+            </Pill>
+          )}
+        </Table.Td>
+        <Table.Td w={230}>
+          {element.adoptionStatus === "Available" ? (
+            <Pill style={{ backgroundColor: "#008000", color: "#ffffff" }}>
+              Available
+            </Pill>
+          ) : (
+            <Pill style={{ backgroundColor: "#FF0000", color: "#ffffff" }}>
+              Adopted
+            </Pill>
+          )}
+        </Table.Td>
+        <Table.Td w={100}>{element.type}</Table.Td>
         <Table.Td w={54}>
           <Menu offset={1}>
             <Menu.Target>

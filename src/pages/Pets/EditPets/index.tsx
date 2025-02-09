@@ -64,6 +64,20 @@ export const EditPets = () => {
       type: "",
       vaccination: false,
       images: droppedImages,
+      personality: {
+        energyLevel: "",
+        temperament: "",
+        training: "",
+        petBehavior: "",
+        specialTraits: "",
+      },
+      adoptionInfo: {
+        idealHome: "",
+        children: false,
+        otherPets: false,
+        experienceLevel: "",
+        specialNeeds: "",
+      },
     },
     validate: zodResolver(petSchema),
   });
@@ -193,6 +207,73 @@ export const EditPets = () => {
           label="Vaccinated"
           mb={16}
           {...getInputProps("vaccination", { type: "checkbox" })}
+        />
+        <Title order={3}>Personality</Title>
+
+        <Select
+          label="Energy Level"
+          data={["High", "Medium", "Low"]}
+          mb={16}
+          {...getInputProps("personality.energyLevel")}
+        />
+
+        <Select
+          label="Temperament"
+          data={["Friendly", "Shy", "Aggressive", "Calm", "Playful"]}
+          mb={16}
+          {...getInputProps("personality.temperament")}
+        />
+
+        <Select
+          label="Training Level"
+          data={["None", "Basic", "Advanced"]}
+          mb={16}
+          {...getInputProps("personality.training")}
+        />
+
+        <TextInput
+          label="Pet Behavior"
+          mb={16}
+          {...getInputProps("personality.petBehavior")}
+        />
+
+        <TextInput
+          label="Special Traits"
+          mb={16}
+          {...getInputProps("personality.specialTraits")}
+        />
+
+        <Title order={3}>Adoption Information</Title>
+
+        <TextInput
+          label="Ideal Home"
+          mb={16}
+          {...getInputProps("adoptionInfo.idealHome")}
+        />
+
+        <Checkbox
+          label="Children Friendly"
+          mb={16}
+          {...getInputProps("adoptionInfo.children", { type: "checkbox" })}
+        />
+
+        <Checkbox
+          label="Other Pets Friendly"
+          mb={16}
+          {...getInputProps("adoptionInfo.otherPets", { type: "checkbox" })}
+        />
+
+        <Select
+          label="Experience Level"
+          data={["FirstTimeOwner", "ExperiencedOwner", "Both"]}
+          mb={16}
+          {...getInputProps("adoptionInfo.experienceLevel")}
+        />
+
+        <TextInput
+          label="Special Needs"
+          mb={16}
+          {...getInputProps("adoptionInfo.specialNeeds")}
         />
 
         <Text fw={600} size="sm" mb={4}>
