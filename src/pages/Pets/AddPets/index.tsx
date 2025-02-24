@@ -57,8 +57,8 @@ export const AddPets = () => {
         },
         adoptionInfo: {
           idealHome: "",
-          children: false,
-          otherPets: false,
+          childrenFriendly: false,
+          otherPetsFriendly: false,
           experienceLevel: "",
           specialNeeds: "",
         },

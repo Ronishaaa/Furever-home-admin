@@ -37,7 +37,7 @@ export const EditPets = () => {
     data,
     isSuccess,
     isLoading: petDataLoading,
-  } = useGetUniquePets(id, Boolean(id));
+  } = useGetUniquePets(Number(id), Boolean(id));
 
   const { mutate: updatePet, isSuccess: updatedPet } = useUpdatePet();
 
@@ -73,8 +73,8 @@ export const EditPets = () => {
       },
       adoptionInfo: {
         idealHome: "",
-        children: false,
-        otherPets: false,
+        childrenFriendly: false,
+        otherPetsFriendly: false,
         experienceLevel: "",
         specialNeeds: "",
       },

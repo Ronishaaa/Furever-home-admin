@@ -4,6 +4,8 @@ export interface LoginPayload {
 }
 
 export interface LoginResponse {
-  token: string;
-  admin: { email: string };
+  data: {
+    accessToken: string;
+    expiresIn: string;
+  };
 }

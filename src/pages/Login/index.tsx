@@ -3,13 +3,12 @@ import { useForm } from "@mantine/form";
 import { useContext } from "react";
 import { Navigate, useLocation } from "react-router-dom";
 import { AuthContext } from "../../contexts";
-import { LoginResponse } from "../../types";
 import styles from "./index.module.scss";
 import { useLogin } from "./queries";
 
 export const Login = () => {
   const form = useForm({
-    initialValues: { email: "admin@gmail.com", password: "admin123" },
+    initialValues: { email: "admin@gmail.com", password: "admin@1234" },
     validate: {
       email: (value: string) =>
         /^\S+@\S+$/.test(value) ? null : "Email is invalid",
@@ -27,11 +26,11 @@ export const Login = () => {
   const handleSubmit = async () => {
     form.validate();
     if (form.isValid()) {
-      const data: LoginResponse = await mutateAsync(form.values);
-
+      const { data } = await mutateAsync(form.values);
+      console.log(data);
       setAuthData({
-        accessToken: data.token,
-        expiresIn: "1d",
+        accessToken: data.accessToken,
+        expiresIn: data.expiresIn,
       });
     }
   };

@@ -15,34 +15,16 @@ const Layout = () => {
 
   return (
     <AppShell padding="md">
-      <AppShell.Header
-        zIndex={120}
-        style={{
-          backgroundColor: "#FF7043",
-          color: "#ffffff",
-        }}
-      >
+      <AppShell.Header zIndex={120}>
         <HeaderUI />
       </AppShell.Header>
 
       <Box>
-        <AppShell.Navbar
-          style={{
-            backgroundColor: "#FF7043",
-          }}
-        >
+        <AppShell.Navbar w="20%">
           <Sidebars />
         </AppShell.Navbar>
 
-        <Box
-          style={{
-            backgroundColor: "#ffffff",
-          }}
-          w="80%"
-          ml="auto"
-          mt={60}
-          p={40}
-        >
+        <Box w="80%" ml="auto" mt={60} p={40}>
           <Outlet />
         </Box>
       </Box>

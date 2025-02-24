@@ -4,29 +4,45 @@ import {
   Flex,
   Group,
   Image,
+  Input,
   LoadingOverlay,
   Menu,
   MenuItem,
   Modal,
+  Pagination,
   Pill,
   Stack,
   Table,
   Title,
   UnstyledButton,
 } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
+import { useDebouncedState, useDisclosure } from "@mantine/hooks";
 import { Notifications } from "@mantine/notifications";
 import { useState } from "react";
-import { BiDotsHorizontalRounded, BiPlus } from "react-icons/bi";
+import { BiDotsHorizontalRounded, BiPlus, BiSearch } from "react-icons/bi";
 import { TbDatabaseOff } from "react-icons/tb";
 import { useNavigate } from "react-router-dom";
 import { useDelPet, useGetPets } from "./queries";
 
 const Pets = () => {
   const navigate = useNavigate();
-  const { data, isLoading, isFetching } = useGetPets();
 
-  const [selectedPet, setSelectedPet] = useState("");
+  const [searchTerm, setSearchTerm] = useDebouncedState("", 300, {
+    leading: true,
+  });
+
+  const [skip, setSkip] = useState(0);
+
+  const [activePage, setActivePage] = useState(1);
+
+  const { data, isLoading, isFetching } = useGetPets({
+    searchTerm,
+    skip,
+    sortBy: "createdAt",
+    sortOrder: "asc",
+  });
+
+  const [selectedPet, setSelectedPet] = useState<number>();
 
   const { mutate: deletePetMutate } = useDelPet();
 
@@ -45,7 +61,7 @@ const Pets = () => {
   const rows = data?.data.map(
     (
       element: {
-        id: string;
+        id: number;
         name: string;
         adoptionStatus: string;
         age: number;
@@ -138,12 +154,25 @@ const Pets = () => {
           onClick={() => navigate("/pets/add-pet")}
           h={40}
           w={155}
-          color="rgb(255, 112, 67)"
           leftSection={<BiPlus size={18} />}
         >
           Add Pet
         </Button>
       </Flex>
+      <Input
+        w="100%"
+        mt={14}
+        mb={4}
+        styles={{ section: { height: 40 }, input: { height: 40 } }}
+        placeholder="Search by pet name and breed"
+        leftSection={<BiSearch />}
+        defaultValue={searchTerm}
+        onChange={(event) => {
+          setSearchTerm(event.currentTarget.value);
+          setSkip(0);
+          setActivePage(1);
+        }}
+      />
 
       <Table striped highlightOnHover>
         <Table.Thead>
@@ -182,6 +211,23 @@ const Pets = () => {
           )}
         </Table.Tbody>
       </Table>
+
+      {rows?.length > 0 && (
+        <Group mt={12} justify="space-between">
+          <div>{`${skip + 1} to ${Math.min(skip + 10, data?.meta.total)} of ${
+            data?.meta.total
+          } entries`}</div>
+          <Pagination
+            total={Math.ceil(data?.meta.total / 10)}
+            value={activePage}
+            onChange={(page: number) => {
+              setSkip((page - 1) * 10);
+              setActivePage(page);
+            }}
+          />
+        </Group>
+      )}
+
       <Modal
         opened={showDeleteModal}
         onClose={closeDeleteModal}

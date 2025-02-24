@@ -28,13 +28,7 @@ const HeaderUI = () => {
           <UnstyledButton style={{ cursor: "pointer", paddingRight: 16 }}>
             <Group gap={7}>
               <Avatar alt="admin-image" radius={"xl"} size={32} />
-              <Text
-                fw={500}
-                size="sm"
-                lh={1}
-                mr={3}
-                style={{ color: "#ffffff" }}
-              >
+              <Text fw={500} size="sm" lh={1} mr={3}>
                 Admin
               </Text>
             </Group>
