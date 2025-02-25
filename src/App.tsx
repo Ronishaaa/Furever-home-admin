@@ -1,7 +1,14 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Layout from "./layout";
-import { AddPets, Dashboard, EditPets, Login } from "./pages";
-import Pets from "./pages/Pets";
+import {
+  AddPets,
+  Dashboard,
+  EditPets,
+  Login,
+  Pets,
+  RescueStories,
+  SuccessStories,
+} from "./pages";
 
 const App = () => {
   const router = createBrowserRouter([
@@ -12,6 +19,8 @@ const App = () => {
         { index: true, element: <Dashboard /> },
 
         { path: "/pets", element: <Pets /> },
+        { path: "/rescue-stories", element: <RescueStories /> },
+        { path: "/success-stories", element: <SuccessStories /> },
         {
           path: "/pets/add-pet",
           element: <AddPets />,

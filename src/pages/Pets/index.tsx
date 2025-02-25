@@ -24,7 +24,7 @@ import { TbDatabaseOff } from "react-icons/tb";
 import { useNavigate } from "react-router-dom";
 import { useDelPet, useGetPets } from "./queries";
 
-const Pets = () => {
+export const Pets = () => {
   const navigate = useNavigate();
 
   const [searchTerm, setSearchTerm] = useDebouncedState("", 300, {
@@ -252,5 +252,3 @@ const Pets = () => {
     </Container>
   );
 };
-
-export default Pets;

@@ -1,5 +1,5 @@
 export interface AddPet {
-  id: number;
+  id: string;
   name: string;
   adoptionStatus: string;
   age: number;

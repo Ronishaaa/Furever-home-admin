@@ -54,6 +54,7 @@ export const EditPets = () => {
     reset,
   } = useForm({
     initialValues: {
+      id: "",
       name: "",
       adoptionStatus: "",
       age: 0,
@@ -97,7 +98,7 @@ export const EditPets = () => {
 
     if (validId) {
       updatePet({
-        id: validId,
+        id: Number(validId),
         values: values,
       });
     }

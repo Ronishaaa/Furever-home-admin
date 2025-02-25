@@ -38,6 +38,7 @@ export const AddPets = () => {
   const { getInputProps, setFieldValue, onSubmit, isDirty, setFieldError } =
     useForm({
       initialValues: {
+        id: "",
         name: "",
         adoptionStatus: "",
         age: 0,
