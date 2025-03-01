@@ -20,11 +20,11 @@ export const useAddSuccessStories = () => {
 
   return useMutation({
     mutationFn: async (values: AddSuccessStory) => {
-      const { data } = await axios.post(`/success-stories`, values);
+      const { data } = await axios.post(`api/success-stories`, values);
       return data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["Get-Success-Stories "] });
+      queryClient.invalidateQueries({ queryKey: ["Get-Success-Stories"] });
       navigate("/success-stories");
     },
   });

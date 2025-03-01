@@ -14,6 +14,7 @@ import {
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { Notifications } from "@mantine/notifications";
+import dayjs from "dayjs";
 import { useState } from "react";
 import { BiDotsHorizontalRounded, BiPlus } from "react-icons/bi";
 import { TbDatabaseOff } from "react-icons/tb";
@@ -25,16 +26,16 @@ export const RescueStories = () => {
 
   const { data, isLoading, isFetching } = useGetAllRescueStories();
 
-  const [selectedPet, setSelectedPet] = useState<number>();
+  const [selectedStory, setSelectedStory] = useState<number>();
 
-  const { mutate: deletePetMutate } = useDelRescueStories();
+  const { mutate: deleteStoryMutate } = useDelRescueStories();
 
   const [showDeleteModal, { open: openDeleteModal, close: closeDeleteModal }] =
     useDisclosure(false);
 
-  const deletePet = () => {
+  const deleteStory = () => {
     closeDeleteModal();
-    deletePetMutate(selectedPet ?? 0);
+    deleteStoryMutate(selectedStory ?? 0);
     Notifications.show({
       title: "Deleted Successfully",
       message: "Rescue story deleted successfully 😊",
@@ -55,7 +56,10 @@ export const RescueStories = () => {
       <Table.Tr key={element.id}>
         <Table.Td w={230}>{index + 1}</Table.Td>
         <Table.Td w={230}>{element.title}</Table.Td>
-        <Table.Td w={230}>{element.rescueDate}</Table.Td>
+        <Table.Td w={230}>
+          {" "}
+          {dayjs(element.rescueDate).format("DD MMM YYYY")}
+        </Table.Td>
 
         <Table.Td w={54}>
           <Menu offset={1}>
@@ -63,7 +67,7 @@ export const RescueStories = () => {
               <UnstyledButton>
                 <BiDotsHorizontalRounded
                   onClick={() => {
-                    setSelectedPet(element.id);
+                    setSelectedStory(element.id);
                   }}
                 />
               </UnstyledButton>
@@ -135,19 +139,19 @@ export const RescueStories = () => {
       <Modal
         opened={showDeleteModal}
         onClose={closeDeleteModal}
-        title="Delete this Pet?"
+        title="Delete this Story?"
         centered
       >
         <Stack>
           <div>
-            This action will permanently delete the selected pet. You can’t undo
-            this action.
+            This action will permanently delete the selected Story. You can’t
+            undo this action.
           </div>
           <Group justify="end">
             <Button variant="outline" onClick={closeDeleteModal}>
               Cancel
             </Button>
-            <Button onClick={deletePet} color="red">
+            <Button onClick={deleteStory} color="red">
               Yes, delete
             </Button>
           </Group>

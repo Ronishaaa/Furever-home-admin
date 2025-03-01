@@ -95,26 +95,22 @@ export const Pets = () => {
         <Table.Td w={230}>{element.color}</Table.Td>
         <Table.Td w={1000}>{element.healthCondition}</Table.Td>
         <Table.Td w={230} align="center">
-          {element.vaccination ? (
-            <Pill style={{ backgroundColor: "#008000", color: "#ffffff" }}>
-              Yes
-            </Pill>
-          ) : (
-            <Pill style={{ backgroundColor: "#FF0000", color: "#ffffff" }}>
-              No
-            </Pill>
-          )}
+          <Pill bg={element.vaccination ? "#A8E6A3" : "#FFB3B3"}>
+            {element.vaccination ? "Yes" : "No"}
+          </Pill>
         </Table.Td>
         <Table.Td w={230}>
-          {element.adoptionStatus === "Available" ? (
-            <Pill style={{ backgroundColor: "#008000", color: "#ffffff" }}>
-              Available
-            </Pill>
-          ) : (
-            <Pill style={{ backgroundColor: "#FF0000", color: "#ffffff" }}>
-              Adopted
-            </Pill>
-          )}
+          <Pill
+            bg={
+              element.adoptionStatus === "Available"
+                ? "#ADD8FF"
+                : element.adoptionStatus === "Adopted"
+                ? "#A8E6A3"
+                : "#FFE5B4"
+            }
+          >
+            {element.adoptionStatus}
+          </Pill>
         </Table.Td>
         <Table.Td w={100}>{element.type}</Table.Td>
         <Table.Td w={54}>

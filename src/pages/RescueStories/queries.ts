@@ -20,29 +20,40 @@ export const useAddRescueStories = () => {
 
   return useMutation({
     mutationFn: async (values: AddRescueStory) => {
-      const { data } = await axios.post(`/rescue-stories`, values);
+      const { data } = await axios.post(`api/rescue-stories`, values);
       return data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["Get-RescueStories "] });
+      queryClient.invalidateQueries({ queryKey: ["Get-Rescue-Stories"] });
       navigate("/rescue-stories");
     },
   });
 };
 
 export const useUploadImage = () => {
-  return useMutation({
+  const uploadImage = useMutation({
     mutationFn: async (files: File[]) => {
-      const formData = new FormData();
-      files.forEach((file) => formData.append("images", file));
+      try {
+        const formData = new FormData();
+        files.forEach((file) => formData.append("images", file));
 
-      const { data } = await axios.post("api/rescue-stories/upload", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+        const { data } = await axios.post(
+          "api/rescue-stories/upload",
+          formData,
+          {
+            headers: { "Content-Type": "multipart/form-data" },
+          }
+        );
 
-      return data;
+        return data;
+      } catch (error) {
+        console.error("Error uploading logo:", error);
+        throw error;
+      }
     },
   });
+
+  return uploadImage;
 };
 
 export const useDelRescueStories = () => {
@@ -54,7 +65,7 @@ export const useDelRescueStories = () => {
       return data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["Get-RescueStories"] });
+      queryClient.invalidateQueries({ queryKey: ["Get-Rescue-Stories"] });
     },
   });
 };
@@ -75,7 +86,7 @@ export const useUpdateRescueStories = () => {
       return data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["Get-RescueStories"] });
+      queryClient.invalidateQueries({ queryKey: ["Get-Rescue-Stories"] });
       navigate(-1);
     },
   });

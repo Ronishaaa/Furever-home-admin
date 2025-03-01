@@ -95,7 +95,6 @@ export const AddPets = () => {
   const handleDrop = async (acceptedFiles: File[]) => {
     try {
       const result = await uploadImage(acceptedFiles);
-      console.log("Upload Response:", result);
 
       if (result?.images?.length) {
         const uploadedUris = result.images.map(
@@ -135,7 +134,7 @@ export const AddPets = () => {
               Cancel
             </Button>
 
-            <Button h={40} type="submit" color="rgb(255, 112, 67)">
+            <Button h={40} type="submit">
               Save changes
             </Button>
           </Group>

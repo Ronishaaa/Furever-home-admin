@@ -123,7 +123,6 @@ export const EditPets = () => {
   const handleDrop = async (acceptedFiles: File[]) => {
     try {
       const result = await uploadImage(acceptedFiles);
-      console.log("Upload Response:", result);
 
       if (result?.images?.length) {
         const uploadedUris = result.images.map(

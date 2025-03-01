@@ -27,7 +27,6 @@ export const Login = () => {
     form.validate();
     if (form.isValid()) {
       const { data } = await mutateAsync(form.values);
-      console.log(data);
       setAuthData({
         accessToken: data.accessToken,
         expiresIn: data.expiresIn,

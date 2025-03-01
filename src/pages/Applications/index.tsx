@@ -7,6 +7,7 @@ import {
   Menu,
   MenuItem,
   Modal,
+  Pill,
   Stack,
   Table,
   Title,
@@ -14,31 +15,30 @@ import {
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { Notifications } from "@mantine/notifications";
-import dayjs from "dayjs";
 import { useState } from "react";
-import { BiDotsHorizontalRounded, BiPlus } from "react-icons/bi";
+import { BiDotsHorizontalRounded } from "react-icons/bi";
 import { TbDatabaseOff } from "react-icons/tb";
 import { useNavigate } from "react-router-dom";
-import { useDelSuccessStories, useGetAllSuccessStories } from "./queries";
+import { useDelApplication, useGetAllApplications } from "./queries";
 
-export const SuccessStories = () => {
+export const Applications = () => {
   const navigate = useNavigate();
 
-  const { data, isLoading, isFetching } = useGetAllSuccessStories();
+  const { data, isLoading, isFetching } = useGetAllApplications();
 
-  const [selectedStory, setSelectedStory] = useState<number>();
+  const [selectedApplication, setSelectedApplication] = useState<number>();
 
-  const { mutate: deleteStoryMutate } = useDelSuccessStories();
+  const { mutate: deleteApplicationMutate } = useDelApplication();
 
   const [showDeleteModal, { open: openDeleteModal, close: closeDeleteModal }] =
     useDisclosure(false);
 
-  const deleteStory = () => {
+  const deleteApplication = () => {
     closeDeleteModal();
-    deleteStoryMutate(selectedStory ?? 0);
+    deleteApplicationMutate(selectedApplication ?? 0);
     Notifications.show({
       title: "Deleted Successfully",
-      message: "Success story deleted successfully 😊",
+      message: "Application deleted successfully 😊",
     });
   };
 
@@ -46,18 +46,33 @@ export const SuccessStories = () => {
     (
       element: {
         id: number;
-        title: string;
-        description: string;
-        adoptionDate: number;
-        images: string[];
+        firstName: string;
+        lastName: string;
+        phoneNumber: string;
+        email: number;
+        applicationStatus: string;
       },
       index: number
     ) => (
       <Table.Tr key={element.id}>
         <Table.Td w={230}>{index + 1}</Table.Td>
-        <Table.Td w={230}>{element.title}</Table.Td>
         <Table.Td w={230}>
-          {dayjs(element.adoptionDate).format("DD MMM YYYY")}
+          {element.firstName} {element.lastName}
+        </Table.Td>
+        <Table.Td w={230}>{element.phoneNumber}</Table.Td>
+        <Table.Td w={230}>{element.email}</Table.Td>
+        <Table.Td w={230}>
+          <Pill
+            bg={
+              element.applicationStatus === "Pending"
+                ? "#FFE5B4"
+                : element.applicationStatus === "Adopted"
+                ? "#A8E6A3"
+                : "#ADD8FF"
+            }
+          >
+            {element.applicationStatus}
+          </Pill>
         </Table.Td>
 
         <Table.Td w={54}>
@@ -66,7 +81,7 @@ export const SuccessStories = () => {
               <UnstyledButton>
                 <BiDotsHorizontalRounded
                   onClick={() => {
-                    setSelectedStory(element.id);
+                    setSelectedApplication(element.id);
                   }}
                 />
               </UnstyledButton>
@@ -75,7 +90,7 @@ export const SuccessStories = () => {
             <Menu.Dropdown>
               <MenuItem
                 onClick={() =>
-                  navigate(`/success-stories/edit-success-story/${element.id}`)
+                  navigate(`/application/edit-application/${element.id}`)
                 }
               >
                 Edit
@@ -89,26 +104,21 @@ export const SuccessStories = () => {
       </Table.Tr>
     )
   );
+
   return (
     <Container>
       <Flex justify="space-between" align="center" mb={24}>
-        <Title>Success Stories</Title>
-
-        <Button
-          onClick={() => navigate("/success-stories/add-success-story")}
-          h={40}
-          leftSection={<BiPlus size={18} />}
-        >
-          Add success story
-        </Button>
+        <Title>Adoption Application</Title>
       </Flex>
 
       <Table striped highlightOnHover>
         <Table.Thead>
           <Table.Tr>
             <Table.Th>S.No</Table.Th>
-            <Table.Th>Title</Table.Th>
-            <Table.Th>Success Date</Table.Th>
+            <Table.Th>Name</Table.Th>
+            <Table.Th>Phone Number</Table.Th>
+            <Table.Th>Email</Table.Th>
+            <Table.Th>Status</Table.Th>
 
             <Table.Th />
           </Table.Tr>
@@ -137,19 +147,19 @@ export const SuccessStories = () => {
       <Modal
         opened={showDeleteModal}
         onClose={closeDeleteModal}
-        title="Delete this Story?"
+        title="Delete this Application?"
         centered
       >
         <Stack>
           <div>
-            This action will permanently delete the selected Story. You can’t
-            undo this action.
+            This action will permanently delete the selected Application. You
+            can’t undo this action.
           </div>
           <Group justify="end">
             <Button variant="outline" onClick={closeDeleteModal}>
               Cancel
             </Button>
-            <Button onClick={deleteStory} color="red">
+            <Button onClick={deleteApplication} color="red">
               Yes, delete
             </Button>
           </Group>

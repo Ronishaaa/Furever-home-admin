@@ -2,8 +2,13 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Layout from "./layout";
 import {
   AddPets,
+  AddRescueStories,
+  AddSuccessStories,
+  Applications,
   Dashboard,
   EditPets,
+  EditRescueStories,
+  EditSuccessStories,
   Login,
   Pets,
   RescueStories,
@@ -19,13 +24,30 @@ const App = () => {
         { index: true, element: <Dashboard /> },
 
         { path: "/pets", element: <Pets /> },
-        { path: "/rescue-stories", element: <RescueStories /> },
-        { path: "/success-stories", element: <SuccessStories /> },
         {
           path: "/pets/add-pet",
           element: <AddPets />,
         },
         { path: "/pets/edit-pet/:id", element: <EditPets /> },
+        { path: "/rescue-stories", element: <RescueStories /> },
+        {
+          path: "/rescue-stories/add-rescue-story",
+          element: <AddRescueStories />,
+        },
+        {
+          path: "/rescue-stories/edit-rescue-story/:id",
+          element: <EditRescueStories />,
+        },
+        {
+          path: "/success-stories/edit-success-story/:id",
+          element: <EditSuccessStories />,
+        },
+        { path: "/success-stories", element: <SuccessStories /> },
+        {
+          path: "/success-stories/add-success-story",
+          element: <AddSuccessStories />,
+        },
+        { path: "/applications", element: <Applications /> },
       ],
     },
     { path: "/login", element: <Login /> },
