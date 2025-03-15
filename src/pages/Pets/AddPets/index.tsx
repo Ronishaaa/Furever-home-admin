@@ -4,14 +4,17 @@ import {
   Checkbox,
   Container,
   Flex,
+  Grid,
   Group,
   Image,
   LoadingOverlay,
   Modal,
+  MultiSelect,
   NumberInput,
   Select,
   Stack,
   Text,
+  Textarea,
   TextInput,
   Title,
 } from "@mantine/core";
@@ -25,7 +28,7 @@ import { BiImageAdd, BiLeftArrowAlt, BiX } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
 import { AddPet } from "../../../types";
 import { useAddPet, useUploadImage } from "../queries";
-import { petSchema } from "../schema";
+import { PetInput, PetSchema } from "../schema";
 
 export const AddPets = () => {
   const navigate = useNavigate();
@@ -36,9 +39,8 @@ export const AddPets = () => {
   const [droppedImages, setDroppedImages] = useState<string[]>([]);
 
   const { getInputProps, setFieldValue, onSubmit, isDirty, setFieldError } =
-    useForm({
+    useForm<PetInput>({
       initialValues: {
-        id: "",
         name: "",
         adoptionStatus: "",
         age: 0,
@@ -46,16 +48,12 @@ export const AddPets = () => {
         color: "",
         gender: "",
         healthCondition: "",
-        type: "",
         vaccination: false,
-        images: [] as string[],
-        personality: {
-          energyLevel: "",
-          temperament: "",
-          training: "",
-          petBehavior: "",
-          specialTraits: "",
-        },
+        images: droppedImages,
+        personality: [],
+        energyLevel: "",
+        trainingLevel: "",
+        specialTraits: "",
         adoptionInfo: {
           idealHome: "",
           childrenFriendly: false,
@@ -64,7 +62,7 @@ export const AddPets = () => {
           specialNeeds: "",
         },
       },
-      validate: zodResolver(petSchema),
+      validate: zodResolver(PetSchema),
     });
 
   const { mutate: addPetMutation, isSuccess, error } = useAddPet();
@@ -140,39 +138,44 @@ export const AddPets = () => {
           </Group>
         </Flex>
 
-        <TextInput label="Pet Name" mb={16} {...getInputProps("name")} />
+        <Grid grow gutter="sm">
+          <Grid.Col span={4}>
+            <TextInput label="Pet Name" mb={16} {...getInputProps("name")} />
+          </Grid.Col>
 
-        <Select
-          label="Adoption Status"
-          data={["Available", "Pending", "Adopted"]}
-          mb={16}
-          {...getInputProps("adoptionStatus")}
-        />
+          <Grid.Col span={4}>
+            <Select
+              label="Adoption Status"
+              data={["Available", "Pending"]}
+              mb={16}
+              {...getInputProps("adoptionStatus")}
+            />
+          </Grid.Col>
+        </Grid>
 
-        <NumberInput label="Age" mb={16} {...getInputProps("age")} />
+        <Grid grow gutter="sm">
+          <Grid.Col span={4}>
+            <NumberInput label="Age" mb={16} {...getInputProps("age")} />
+          </Grid.Col>
+
+          <Grid.Col span={4}>
+            <Select
+              label="Gender"
+              data={["Male", "Female"]}
+              mb={16}
+              {...getInputProps("gender")}
+            />
+          </Grid.Col>
+        </Grid>
 
         <TextInput label="Breed" mb={16} {...getInputProps("breed")} />
 
         <TextInput label="Color" mb={16} {...getInputProps("color")} />
 
-        <Select
-          label="Gender"
-          data={["Male", "Female"]}
-          mb={16}
-          {...getInputProps("gender")}
-        />
-
         <TextInput
           label="Health Condition"
           mb={16}
           {...getInputProps("healthCondition")}
-        />
-
-        <Select
-          label="Type"
-          data={["Dog", "Cat", "Bird", "Other"]}
-          mb={16}
-          {...getInputProps("type")}
         />
 
         <Checkbox
@@ -181,39 +184,58 @@ export const AddPets = () => {
           {...getInputProps("vaccination", { type: "checkbox" })}
         />
 
-        <Title order={3}>Personality</Title>
-
-        <Select
-          label="Energy Level"
-          data={["High", "Medium", "Low"]}
+        <MultiSelect
+          label="Personality"
+          data={[
+            "Friendly",
+            "Shy",
+            "Aggressive",
+            "Calm",
+            "Playful",
+            "Loyal",
+            "Energetic",
+            "Independent",
+            "Protective",
+            "Affectionate",
+            "Curious",
+            "Fearful",
+            "Confident",
+            "Social",
+            "Reserved",
+            "Obedient",
+            "Dominant",
+            "Mischievous",
+            "Outgoing",
+            "Laid-back",
+          ]}
           mb={16}
-          {...getInputProps("personality.energyLevel")}
+          searchable
+          {...getInputProps("personality")}
         />
 
-        <Select
-          label="Temperament"
-          data={["Friendly", "Shy", "Aggressive", "Calm", "Playful"]}
-          mb={16}
-          {...getInputProps("personality.temperament")}
-        />
+        <Grid grow gutter="sm">
+          <Grid.Col span={4}>
+            <Select
+              label="Energy Level"
+              data={["High", "Medium", "Low"]}
+              mb={16}
+              {...getInputProps("energyLevel")}
+            />
+          </Grid.Col>
+          <Grid.Col span={4}>
+            <Select
+              label="Training Level"
+              data={["None", "Basic", "Advanced"]}
+              mb={16}
+              {...getInputProps("trainingLevel")}
+            />
+          </Grid.Col>
+        </Grid>
 
-        <Select
-          label="Training Level"
-          data={["None", "Basic", "Advanced"]}
-          mb={16}
-          {...getInputProps("personality.training")}
-        />
-
-        <TextInput
-          label="Pet Behavior"
-          mb={16}
-          {...getInputProps("personality.petBehavior")}
-        />
-
-        <TextInput
+        <Textarea
           label="Special Traits"
           mb={16}
-          {...getInputProps("personality.specialTraits")}
+          {...getInputProps("specialTraits")}
         />
 
         {/* Adoption Information Section */}
@@ -225,26 +247,33 @@ export const AddPets = () => {
           {...getInputProps("adoptionInfo.idealHome")}
         />
 
-        <Checkbox
-          label="Children Friendly"
-          mb={16}
-          {...getInputProps("adoptionInfo.children", { type: "checkbox" })}
-        />
-
-        <Checkbox
-          label="Other Pets Friendly"
-          mb={16}
-          {...getInputProps("adoptionInfo.otherPets", { type: "checkbox" })}
-        />
-
-        <Select
-          label="Experience Level"
-          data={["FirstTimeOwner", "ExperiencedOwner", "Both"]}
-          mb={16}
-          {...getInputProps("adoptionInfo.experienceLevel")}
-        />
-
-        <TextInput
+        <Grid grow gutter="sm" align="center">
+          <Grid.Col span={4}>
+            <Select
+              label="Experience Level"
+              data={["FirstTimeOwner", "ExperiencedOwner"]}
+              mb={16}
+              {...getInputProps("adoptionInfo.experienceLevel")}
+            />
+          </Grid.Col>
+          <Grid.Col span={4}>
+            <Checkbox
+              label="Children Friendly"
+              mb={16}
+              {...getInputProps("adoptionInfo.childrenFriendly", {
+                type: "checkbox",
+              })}
+            />
+            <Checkbox
+              label="Other Pets Friendly"
+              mb={16}
+              {...getInputProps("adoptionInfo.otherPetsFriendly", {
+                type: "checkbox",
+              })}
+            />
+          </Grid.Col>
+        </Grid>
+        <Textarea
           label="Special Needs"
           mb={16}
           {...getInputProps("adoptionInfo.specialNeeds")}
@@ -259,8 +288,8 @@ export const AddPets = () => {
           onDrop={handleDrop}
           accept={["image/png", "image/jpeg", "image/webp", "image/jpg"]}
           h={146}
-          maxSize={1 * 1024 ** 2}
           multiple
+          styles={{ inner: { pointerEvents: "all" } }}
         >
           {droppedImages.length > 0 ? (
             <Flex wrap="wrap" gap={2}>

@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Layout from "./layout";
 import {
@@ -14,8 +15,31 @@ import {
   RescueStories,
   SuccessStories,
 } from "./pages";
+import { socket } from "./socket";
 
 const App = () => {
+  const [isConnected, setIsConnected] = useState(socket.connected);
+
+  useEffect(() => {
+    const onConnect = () => {
+      setIsConnected(true);
+    };
+
+    const onDisconnect = () => {
+      setIsConnected(false);
+    };
+
+    socket.on("connect", onConnect);
+    socket.on("disconnect", onDisconnect);
+
+    return () => {
+      socket.off("connect", onConnect);
+      socket.off("disconnect", onDisconnect);
+    };
+  }, []);
+
+  console.log(isConnected);
+
   const router = createBrowserRouter([
     {
       path: "/",

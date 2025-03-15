@@ -17,9 +17,6 @@ import { Dropzone } from "@mantine/dropzone";
 import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
 import { Notifications } from "@mantine/notifications";
-import { RichTextEditor } from "@mantine/tiptap";
-import { useEditor } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
 import { zodResolver } from "mantine-form-zod-resolver";
 import { useEffect, useState } from "react";
 import { BiImageAdd, BiLeftArrowAlt, BiX } from "react-icons/bi";
@@ -32,6 +29,7 @@ import {
   useUploadImage,
 } from "../queries";
 import { RescueStorySchema } from "../schema";
+import { RichTextEditorComp } from "./components";
 
 export const EditRescueStories = () => {
   const { id } = useParams();
@@ -52,6 +50,7 @@ export const EditRescueStories = () => {
     isDirty,
     setInitialValues,
     reset,
+    values,
     setFieldValue,
   } = useForm({
     initialValues: {
@@ -132,11 +131,7 @@ export const EditRescueStories = () => {
     setDroppedImages(updatedImages);
     setFieldValue("imageUrl", updatedImages);
   };
-  const editor = useEditor({
-    extensions: [StarterKit],
-    content: data?.data.description,
-    onUpdate: ({ editor }) => setFieldValue("description", editor.getHTML()),
-  });
+
   return (
     <Container>
       <LoadingOverlay visible={isDataLoading} zIndex={1000} />
@@ -164,37 +159,10 @@ export const EditRescueStories = () => {
         <TextInput label="Title" mb={16} {...getInputProps("title")} />
 
         <Text>Story</Text>
-        <RichTextEditor editor={editor}>
-          <RichTextEditor.Toolbar sticky stickyOffset={60}>
-            <RichTextEditor.ControlsGroup>
-              <RichTextEditor.Bold />
-              <RichTextEditor.Italic />
-              <RichTextEditor.Underline />
-            </RichTextEditor.ControlsGroup>
-
-            <RichTextEditor.ControlsGroup>
-              <RichTextEditor.H1 />
-              <RichTextEditor.H2 />
-              <RichTextEditor.H3 />
-              <RichTextEditor.H4 />
-            </RichTextEditor.ControlsGroup>
-
-            <RichTextEditor.ControlsGroup>
-              <RichTextEditor.Blockquote />
-              <RichTextEditor.BulletList />
-              <RichTextEditor.OrderedList />
-            </RichTextEditor.ControlsGroup>
-
-            <RichTextEditor.ControlsGroup>
-              <RichTextEditor.AlignLeft />
-              <RichTextEditor.AlignCenter />
-              <RichTextEditor.AlignJustify />
-              <RichTextEditor.AlignRight />
-            </RichTextEditor.ControlsGroup>
-          </RichTextEditor.Toolbar>
-
-          <RichTextEditor.Content __size="100px" />
-        </RichTextEditor>
+        <RichTextEditorComp
+          value={values.description}
+          onChange={(value) => setFieldValue("description", value)}
+        />
 
         <DateInput
           label="Adoption Date"

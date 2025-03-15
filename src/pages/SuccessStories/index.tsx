@@ -54,8 +54,8 @@ export const SuccessStories = () => {
       index: number
     ) => (
       <Table.Tr key={element.id}>
-        <Table.Td w={230}>{index + 1}</Table.Td>
-        <Table.Td w={230}>{element.title}</Table.Td>
+        <Table.Td w={50}>{index + 1}</Table.Td>
+        <Table.Td>{element.title}</Table.Td>
         <Table.Td w={230}>
           {dayjs(element.adoptionDate).format("DD MMM YYYY")}
         </Table.Td>

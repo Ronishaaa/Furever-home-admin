@@ -32,7 +32,7 @@ export const useAddPet = () => {
 
   return useMutation({
     mutationFn: async (values: AddPet) => {
-      const { data } = await axios.post(`/add-pet`, values);
+      const { data } = await axios.post(`api/pets`, values);
       return data;
     },
     onSuccess: () => {
@@ -48,7 +48,7 @@ export const useUploadImage = () => {
       const formData = new FormData();
       files.forEach((file) => formData.append("images", file));
 
-      const { data } = await axios.post("api/upload", formData, {
+      const { data } = await axios.post("api/pets/upload", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
@@ -83,6 +83,9 @@ export const useUpdatePet = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["Get-Pets"] });
       navigate(-1);
+    },
+    onError: () => {
+      console.log("error");
     },
   });
 };

@@ -3,28 +3,30 @@ import {
   Button,
   Checkbox,
   Flex,
+  Grid,
   Group,
   Image,
   LoadingOverlay,
   Modal,
+  MultiSelect,
   NumberInput,
   Select,
   Stack,
   Text,
+  Textarea,
   TextInput,
   Title,
 } from "@mantine/core";
 import { Dropzone } from "@mantine/dropzone";
-import { useForm } from "@mantine/form";
+import { useForm, zodResolver } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
 import { Notifications } from "@mantine/notifications";
-import { zodResolver } from "mantine-form-zod-resolver";
 import { useEffect, useState } from "react";
 import { BiImageAdd, BiLeftArrowAlt, BiX } from "react-icons/bi";
 import { useNavigate, useParams } from "react-router-dom";
 import { AddPet } from "../../../types";
 import { useGetUniquePets, useUpdatePet, useUploadImage } from "../queries";
-import { petSchema } from "../schema";
+import { PetInput, PetSchema } from "../schema";
 
 export const EditPets = () => {
   const { id } = useParams();
@@ -52,9 +54,8 @@ export const EditPets = () => {
     onSubmit,
     isDirty,
     reset,
-  } = useForm({
+  } = useForm<PetInput>({
     initialValues: {
-      id: "",
       name: "",
       adoptionStatus: "",
       age: 0,
@@ -62,16 +63,13 @@ export const EditPets = () => {
       color: "",
       gender: "",
       healthCondition: "",
-      type: "",
       vaccination: false,
       images: droppedImages,
-      personality: {
-        energyLevel: "",
-        temperament: "",
-        training: "",
-        petBehavior: "",
-        specialTraits: "",
-      },
+      personality: [],
+      energyLevel: "",
+      trainingLevel: "",
+      specialTraits: "",
+      strangerBehavior: "",
       adoptionInfo: {
         idealHome: "",
         childrenFriendly: false,
@@ -80,7 +78,7 @@ export const EditPets = () => {
         specialNeeds: "",
       },
     },
-    validate: zodResolver(petSchema),
+    validate: zodResolver(PetSchema),
   });
 
   useEffect(() => {
@@ -94,6 +92,7 @@ export const EditPets = () => {
   }, [data, isSuccess, reset, setInitialValues]);
 
   const handleSubmit = (values: AddPet) => {
+    console.log("hi");
     const validId: string | undefined = id ? id : undefined;
 
     if (validId) {
@@ -168,39 +167,49 @@ export const EditPets = () => {
           </Group>
         </Flex>
 
-        <TextInput label="Pet Name" mb={16} {...getInputProps("name")} />
+        <Grid grow gutter="sm">
+          <Grid.Col span={4}>
+            <TextInput label="Pet Name" mb={16} {...getInputProps("name")} />
+          </Grid.Col>
 
-        <Select
-          label="Adoption Status"
-          data={["Available", "Pending", "Adopted"]}
-          mb={16}
-          {...getInputProps("adoptionStatus")}
-        />
+          <Grid.Col span={4}>
+            <Select
+              label="Adoption Status"
+              data={["Available", "Pending"]}
+              mb={16}
+              {...getInputProps("adoptionStatus")}
+            />
+          </Grid.Col>
+        </Grid>
 
-        <NumberInput label="Age" mb={16} {...getInputProps("age")} />
+        <Grid grow gutter="sm">
+          <Grid.Col span={4}>
+            <NumberInput label="Age" mb={16} {...getInputProps("age")} />
+          </Grid.Col>
+
+          <Grid.Col span={4}>
+            <Select
+              label="Gender"
+              data={["Male", "Female"]}
+              mb={16}
+              {...getInputProps("gender")}
+            />
+          </Grid.Col>
+        </Grid>
 
         <TextInput label="Breed" mb={16} {...getInputProps("breed")} />
 
         <TextInput label="Color" mb={16} {...getInputProps("color")} />
-
-        <Select
-          label="Gender"
-          data={["Male", "Female"]}
-          mb={16}
-          {...getInputProps("gender")}
-        />
 
         <TextInput
           label="Health Condition"
           mb={16}
           {...getInputProps("healthCondition")}
         />
-
-        <Select
-          label="Type"
-          data={["Dog", "Cat", "Bird", "Other"]}
+        <TextInput
+          label="strangerBehavior"
           mb={16}
-          {...getInputProps("type")}
+          {...getInputProps("strangerBehavior")}
         />
 
         <Checkbox
@@ -208,39 +217,59 @@ export const EditPets = () => {
           mb={16}
           {...getInputProps("vaccination", { type: "checkbox" })}
         />
-        <Title order={3}>Personality</Title>
 
-        <Select
-          label="Energy Level"
-          data={["High", "Medium", "Low"]}
+        <MultiSelect
+          label="Personality"
+          data={[
+            "Friendly",
+            "Shy",
+            "Aggressive",
+            "Calm",
+            "Playful",
+            "Loyal",
+            "Energetic",
+            "Independent",
+            "Protective",
+            "Affectionate",
+            "Curious",
+            "Fearful",
+            "Confident",
+            "Social",
+            "Reserved",
+            "Obedient",
+            "Dominant",
+            "Mischievous",
+            "Outgoing",
+            "Laid-back",
+          ]}
           mb={16}
-          {...getInputProps("personality.energyLevel")}
+          searchable
+          {...getInputProps("personality")}
         />
 
-        <Select
-          label="Temperament"
-          data={["Friendly", "Shy", "Aggressive", "Calm", "Playful"]}
-          mb={16}
-          {...getInputProps("personality.temperament")}
-        />
-
-        <Select
-          label="Training Level"
-          data={["None", "Basic", "Advanced"]}
-          mb={16}
-          {...getInputProps("personality.training")}
-        />
-
-        <TextInput
-          label="Pet Behavior"
-          mb={16}
-          {...getInputProps("personality.petBehavior")}
-        />
+        <Grid grow gutter="sm">
+          <Grid.Col span={4}>
+            <Select
+              label="Energy Level"
+              data={["High", "Medium", "Low"]}
+              mb={16}
+              {...getInputProps("energyLevel")}
+            />
+          </Grid.Col>
+          <Grid.Col span={4}>
+            <Select
+              label="Training Level"
+              data={["None", "Basic", "Advanced"]}
+              mb={16}
+              {...getInputProps("trainingLevel")}
+            />
+          </Grid.Col>
+        </Grid>
 
         <TextInput
           label="Special Traits"
           mb={16}
-          {...getInputProps("personality.specialTraits")}
+          {...getInputProps("specialTraits")}
         />
 
         <Title order={3}>Adoption Information</Title>
@@ -251,26 +280,34 @@ export const EditPets = () => {
           {...getInputProps("adoptionInfo.idealHome")}
         />
 
-        <Checkbox
-          label="Children Friendly"
-          mb={16}
-          {...getInputProps("adoptionInfo.children", { type: "checkbox" })}
-        />
+        <Grid grow gutter="sm" align="center">
+          <Grid.Col span={4}>
+            <Select
+              label="Experience Level"
+              data={["FirstTimeOwner", "ExperiencedOwner"]}
+              mb={16}
+              {...getInputProps("adoptionInfo.experienceLevel")}
+            />
+          </Grid.Col>
+          <Grid.Col span={4}>
+            <Checkbox
+              label="Children Friendly"
+              mb={16}
+              {...getInputProps("adoptionInfo.childrenFriendly", {
+                type: "checkbox",
+              })}
+            />
+            <Checkbox
+              label="Other Pets Friendly"
+              mb={16}
+              {...getInputProps("adoptionInfo.otherPetsFriendly", {
+                type: "checkbox",
+              })}
+            />
+          </Grid.Col>
+        </Grid>
 
-        <Checkbox
-          label="Other Pets Friendly"
-          mb={16}
-          {...getInputProps("adoptionInfo.otherPets", { type: "checkbox" })}
-        />
-
-        <Select
-          label="Experience Level"
-          data={["FirstTimeOwner", "ExperiencedOwner", "Both"]}
-          mb={16}
-          {...getInputProps("adoptionInfo.experienceLevel")}
-        />
-
-        <TextInput
+        <Textarea
           label="Special Needs"
           mb={16}
           {...getInputProps("adoptionInfo.specialNeeds")}
@@ -284,8 +321,8 @@ export const EditPets = () => {
           onDrop={handleDrop}
           accept={["image/png", "image/jpeg", "image/webp", "image/jpg"]}
           h={146}
-          maxSize={1 * 1024 ** 2}
           multiple
+          styles={{ inner: { pointerEvents: "all" } }}
         >
           {(droppedImages || []).length > 0 ? (
             <Flex wrap="wrap" gap={2}>

@@ -66,10 +66,8 @@ export const Pets = () => {
         adoptionStatus: string;
         age: number;
         breed: string;
-        color: string;
-        gender: "Male";
+        gender: string;
         healthCondition: string;
-        type: string;
         vaccination: boolean;
         images: string[];
       },
@@ -92,8 +90,6 @@ export const Pets = () => {
         <Table.Td w={230}>{element.breed}</Table.Td>
         <Table.Td w={50}>{element.age}</Table.Td>
         <Table.Td w={230}>{element.gender}</Table.Td>
-        <Table.Td w={230}>{element.color}</Table.Td>
-        <Table.Td w={1000}>{element.healthCondition}</Table.Td>
         <Table.Td w={230} align="center">
           <Pill bg={element.vaccination ? "#A8E6A3" : "#FFB3B3"}>
             {element.vaccination ? "Yes" : "No"}
@@ -112,7 +108,6 @@ export const Pets = () => {
             {element.adoptionStatus}
           </Pill>
         </Table.Td>
-        <Table.Td w={100}>{element.type}</Table.Td>
         <Table.Td w={54}>
           <Menu offset={1}>
             <Menu.Target>
@@ -179,11 +174,8 @@ export const Pets = () => {
             <Table.Th>Breed</Table.Th>
             <Table.Th>Age</Table.Th>
             <Table.Th>Gender</Table.Th>
-            <Table.Th>Color</Table.Th>
-            <Table.Th>Health Condition</Table.Th>
             <Table.Th>Vaccination</Table.Th>
             <Table.Th>Adoption Status</Table.Th>
-            <Table.Th>Type</Table.Th>
             <Table.Th />
           </Table.Tr>
         </Table.Thead>
