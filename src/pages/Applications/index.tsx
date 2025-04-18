@@ -1,49 +1,21 @@
 import {
   Avatar,
   Badge,
-  Button,
   Container,
   Flex,
   Group,
   LoadingOverlay,
-  Menu,
-  MenuItem,
-  Modal,
-  Stack,
   Table,
   Text,
   Title,
-  UnstyledButton,
 } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
-import { Notifications } from "@mantine/notifications";
-import { useState } from "react";
-import { BiDotsHorizontalRounded } from "react-icons/bi";
 import { TbDatabaseOff } from "react-icons/tb";
 import { useNavigate } from "react-router-dom";
-import { useDelApplication, useGetAllApplications } from "./queries";
+import { useGetAllApplications } from "./queries";
 
 export const Applications = () => {
   const navigate = useNavigate();
-
   const { data, isLoading, isFetching } = useGetAllApplications();
-  console.log(data);
-
-  const [selectedApplication, setSelectedApplication] = useState<number>();
-
-  const { mutate: deleteApplicationMutate } = useDelApplication();
-
-  const [showDeleteModal, { open: openDeleteModal, close: closeDeleteModal }] =
-    useDisclosure(false);
-
-  const deleteApplication = () => {
-    closeDeleteModal();
-    deleteApplicationMutate(selectedApplication ?? 0);
-    Notifications.show({
-      title: "Deleted Successfully",
-      message: "Application deleted successfully 😊",
-    });
-  };
 
   const rows = data?.data.map(
     (
@@ -62,7 +34,11 @@ export const Applications = () => {
       },
       index: number
     ) => (
-      <Table.Tr key={element.id}>
+      <Table.Tr
+        key={element.id}
+        style={{ cursor: "pointer" }}
+        onClick={() => navigate(`/applications/${element.id}`)}
+      >
         <Table.Td>{index + 1}</Table.Td>
         <Table.Td>
           <Group gap="sm">
@@ -102,30 +78,10 @@ export const Applications = () => {
             {element.applicationStatus}
           </Badge>
         </Table.Td>
-        <Table.Td w={54}>
-          <Menu offset={1}>
-            <Menu.Target>
-              <UnstyledButton>
-                <BiDotsHorizontalRounded
-                  onClick={() => {
-                    setSelectedApplication(element.id);
-                  }}
-                />
-              </UnstyledButton>
-            </Menu.Target>
-            <Menu.Dropdown>
-              <MenuItem onClick={() => navigate(`/applications/${element.id}`)}>
-                Edit
-              </MenuItem>
-              <MenuItem c="red" onClick={openDeleteModal}>
-                Delete
-              </MenuItem>
-            </Menu.Dropdown>
-          </Menu>
-        </Table.Td>
       </Table.Tr>
     )
   );
+
   return (
     <Container>
       <Flex justify="space-between" align="center" mb={24}>
@@ -140,7 +96,6 @@ export const Applications = () => {
             <Table.Th w={150}>Applicant</Table.Th>
             <Table.Th w={160}>Contact Info</Table.Th>
             <Table.Th w={120}>Status</Table.Th>
-            <Table.Th w={40}></Table.Th>
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody pos="relative">
@@ -163,28 +118,6 @@ export const Applications = () => {
           )}
         </Table.Tbody>
       </Table>
-
-      <Modal
-        opened={showDeleteModal}
-        onClose={closeDeleteModal}
-        title="Delete this Application?"
-        centered
-      >
-        <Stack>
-          <div>
-            This action will permanently delete the selected Application. You
-            can’t undo this action.
-          </div>
-          <Group justify="end">
-            <Button variant="outline" onClick={closeDeleteModal}>
-              Cancel
-            </Button>
-            <Button onClick={deleteApplication} color="red">
-              Yes, delete
-            </Button>
-          </Group>
-        </Stack>
-      </Modal>
     </Container>
   );
 };

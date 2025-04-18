@@ -165,7 +165,7 @@ export const EditRescueStories = () => {
         />
 
         <DateInput
-          label="Adoption Date"
+          label="Rescue Date"
           rightSection={<MdCalendarToday size={18} color="#757575" />}
           rightSectionPointerEvents="none"
           {...getInputProps("rescueDate")}
