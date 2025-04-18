@@ -1,4 +1,6 @@
 import {
+  Avatar,
+  Badge,
   Button,
   Container,
   Flex,
@@ -7,9 +9,9 @@ import {
   Menu,
   MenuItem,
   Modal,
-  Pill,
   Stack,
   Table,
+  Text,
   Title,
   UnstyledButton,
 } from "@mantine/core";
@@ -25,6 +27,7 @@ export const Applications = () => {
   const navigate = useNavigate();
 
   const { data, isLoading, isFetching } = useGetAllApplications();
+  console.log(data);
 
   const [selectedApplication, setSelectedApplication] = useState<number>();
 
@@ -49,32 +52,56 @@ export const Applications = () => {
         firstName: string;
         lastName: string;
         phoneNumber: string;
-        email: number;
+        email: string;
         applicationStatus: string;
+        pet: {
+          name: string;
+          breed: string;
+          images: string[];
+        };
       },
       index: number
     ) => (
       <Table.Tr key={element.id}>
-        <Table.Td w={230}>{index + 1}</Table.Td>
-        <Table.Td w={230}>
-          {element.firstName} {element.lastName}
+        <Table.Td>{index + 1}</Table.Td>
+        <Table.Td>
+          <Group gap="sm">
+            <Avatar size={40} src={element.pet.images?.[0]} radius="sm" />
+            <div>
+              <Text>{element.pet.name}</Text>
+              <Text size="sm" c="dimmed">
+                {element.pet.breed}
+              </Text>
+            </div>
+          </Group>
         </Table.Td>
-        <Table.Td w={230}>{element.phoneNumber}</Table.Td>
-        <Table.Td w={230}>{element.email}</Table.Td>
-        <Table.Td w={230}>
-          <Pill
-            bg={
+        <Table.Td>
+          <Text>
+            {element.firstName} {element.lastName}
+          </Text>
+        </Table.Td>
+        <Table.Td>
+          <div>
+            <Text>{element.phoneNumber}</Text>
+            <Text size="sm" c="dimmed">
+              {element.email}
+            </Text>
+          </div>
+        </Table.Td>
+        <Table.Td>
+          <Badge
+            color={
               element.applicationStatus === "Pending"
-                ? "#FFE5B4"
-                : element.applicationStatus === "Adopted"
-                ? "#A8E6A3"
-                : "#ADD8FF"
+                ? "yellow"
+                : element.applicationStatus === "Approved"
+                ? "teal"
+                : "gray"
             }
+            variant="light"
           >
             {element.applicationStatus}
-          </Pill>
+          </Badge>
         </Table.Td>
-
         <Table.Td w={54}>
           <Menu offset={1}>
             <Menu.Target>
@@ -86,13 +113,8 @@ export const Applications = () => {
                 />
               </UnstyledButton>
             </Menu.Target>
-
             <Menu.Dropdown>
-              <MenuItem
-                onClick={() =>
-                  navigate(`/application/edit-application/${element.id}`)
-                }
-              >
+              <MenuItem onClick={() => navigate(`/applications/${element.id}`)}>
                 Edit
               </MenuItem>
               <MenuItem c="red" onClick={openDeleteModal}>
@@ -104,7 +126,6 @@ export const Applications = () => {
       </Table.Tr>
     )
   );
-
   return (
     <Container>
       <Flex justify="space-between" align="center" mb={24}>
@@ -114,13 +135,12 @@ export const Applications = () => {
       <Table striped highlightOnHover>
         <Table.Thead>
           <Table.Tr>
-            <Table.Th>S.No</Table.Th>
-            <Table.Th>Name</Table.Th>
-            <Table.Th>Phone Number</Table.Th>
-            <Table.Th>Email</Table.Th>
-            <Table.Th>Status</Table.Th>
-
-            <Table.Th />
+            <Table.Th w={80}>S.No.</Table.Th>
+            <Table.Th w={180}>Pet Details</Table.Th>
+            <Table.Th w={150}>Applicant</Table.Th>
+            <Table.Th w={160}>Contact Info</Table.Th>
+            <Table.Th w={120}>Status</Table.Th>
+            <Table.Th w={40}></Table.Th>
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody pos="relative">

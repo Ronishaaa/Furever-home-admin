@@ -1,5 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
 import { axios } from "../../lib";
+import { Application } from "../../types";
 
 export const useGetAllApplications = () => {
   return useQuery({
@@ -37,5 +39,24 @@ export const useGetUniqueApplication = (
       return data;
     },
     enabled,
+  });
+};
+
+export const useUpdateApplicationStatus = () => {
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
+
+  return useMutation({
+    mutationFn: async ({ id, values }: { id: number; values: Application }) => {
+      const { data } = await axios.patch(`api/application/${id}`, values);
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["Get-all-applications"] });
+      navigate(-1);
+    },
+    onError: () => {
+      console.log("error");
+    },
   });
 };

@@ -92,7 +92,6 @@ export const EditPets = () => {
   }, [data, isSuccess, reset, setInitialValues]);
 
   const handleSubmit = (values: AddPet) => {
-    console.log("hi");
     const validId: string | undefined = id ? id : undefined;
 
     if (validId) {
