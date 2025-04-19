@@ -6,6 +6,7 @@ import {
   AddSuccessStories,
   Applications,
   Dashboard,
+  Donations,
   EditPets,
   EditRescueStories,
   EditSuccessStories,
@@ -31,6 +32,7 @@ const App = () => {
         },
         { path: "/pets/edit-pet/:id", element: <EditPets /> },
         { path: "/rescue-stories", element: <RescueStories /> },
+        { path: "/donations", element: <Donations /> },
         {
           path: "/rescue-stories/add-rescue-story",
           element: <AddRescueStories />,

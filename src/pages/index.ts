@@ -1,6 +1,7 @@
 export * from "./Applications";
 export * from "./Applications/ReviewApplication";
 export * from "./Dashboard";
+export * from "./Donations";
 export * from "./Login";
 export * from "./Pets";
 export * from "./Pets/AddPets";

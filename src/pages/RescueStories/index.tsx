@@ -7,6 +7,7 @@ import {
   Menu,
   MenuItem,
   Modal,
+  Pagination,
   Stack,
   Table,
   Title,
@@ -23,8 +24,9 @@ import { useDelRescueStories, useGetAllRescueStories } from "./queries";
 
 export const RescueStories = () => {
   const navigate = useNavigate();
-
-  const { data, isLoading, isFetching } = useGetAllRescueStories();
+  const [skip, setSkip] = useState(0);
+  const [activePage, setActivePage] = useState(1);
+  const { data, isLoading, isFetching } = useGetAllRescueStories({ skip });
 
   const [selectedStory, setSelectedStory] = useState<number>();
 
@@ -134,6 +136,22 @@ export const RescueStories = () => {
           )}
         </Table.Tbody>
       </Table>
+
+      {rows?.length > 0 && (
+        <Group mt={12} justify="space-between">
+          <div>{`${skip + 1} to ${Math.min(skip + 10, data?.meta.total)} of ${
+            data?.meta.total
+          } entries`}</div>
+          <Pagination
+            total={Math.ceil(data?.meta.total / 10)}
+            value={activePage}
+            onChange={(page: number) => {
+              setSkip((page - 1) * 10);
+              setActivePage(page);
+            }}
+          />
+        </Group>
+      )}
 
       <Modal
         opened={showDeleteModal}

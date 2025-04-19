@@ -1,5 +1,4 @@
 import {
-  Avatar,
   Badge,
   Container,
   Flex,
@@ -12,75 +11,50 @@ import {
 } from "@mantine/core";
 import { useState } from "react";
 import { TbDatabaseOff } from "react-icons/tb";
-import { useNavigate } from "react-router-dom";
-import { useGetAllApplications } from "./queries";
+import { useGetAllDonations } from "./queries";
 
-export const Applications = () => {
-  const navigate = useNavigate();
+export const Donations = () => {
   const [skip, setSkip] = useState(0);
   const [activePage, setActivePage] = useState(1);
 
-  const { data, isLoading, isFetching } = useGetAllApplications({ skip });
+  const { data, isLoading, isFetching } = useGetAllDonations({ skip });
 
-  const rows = data?.data.map(
+  const rows = data?.data?.map(
     (
-      element: {
+      donation: {
         id: number;
-        firstName: string;
-        lastName: string;
-        phoneNumber: string;
+        name: string;
         email: string;
-        applicationStatus: string;
-        pet: {
-          name: string;
-          breed: string;
-          images: string[];
-        };
+        phone: string;
+        amount: number;
+        message: string;
+        status: string;
       },
       index: number
     ) => (
-      <Table.Tr
-        key={element.id}
-        style={{ cursor: "pointer" }}
-        onClick={() => navigate(`/applications/${element.id}`)}
-      >
+      <Table.Tr key={donation.id} style={{ cursor: "pointer" }}>
         <Table.Td>{index + 1}</Table.Td>
+        <Table.Td>{donation.name}</Table.Td>
         <Table.Td>
-          <Group gap="sm">
-            <Avatar size={40} src={element.pet.images?.[0]} radius="sm" />
-            <div>
-              <Text>{element.pet.name}</Text>
-              <Text size="sm" c="dimmed">
-                {element.pet.breed}
-              </Text>
-            </div>
-          </Group>
-        </Table.Td>
-        <Table.Td>
-          <Text>
-            {element.firstName} {element.lastName}
+          <Text>{donation.phone}</Text>
+          <Text size="sm" c="dimmed">
+            {donation.email}
           </Text>
         </Table.Td>
-        <Table.Td>
-          <div>
-            <Text>{element.phoneNumber}</Text>
-            <Text size="sm" c="dimmed">
-              {element.email}
-            </Text>
-          </div>
-        </Table.Td>
+        <Table.Td>{donation.amount}</Table.Td>
+        <Table.Td>{donation.message || "-"}</Table.Td>
         <Table.Td>
           <Badge
             color={
-              element.applicationStatus === "Pending"
-                ? "yellow"
-                : element.applicationStatus === "Approved"
+              donation.status === "completed"
                 ? "teal"
+                : donation.status === "initiated"
+                ? "yellow"
                 : "gray"
             }
             variant="light"
           >
-            {element.applicationStatus}
+            {donation.status}
           </Badge>
         </Table.Td>
       </Table.Tr>
@@ -90,16 +64,17 @@ export const Applications = () => {
   return (
     <Container>
       <Flex justify="space-between" align="center" mb={24}>
-        <Title>Adoption Application</Title>
+        <Title>Donations</Title>
       </Flex>
 
       <Table striped highlightOnHover>
         <Table.Thead>
           <Table.Tr>
             <Table.Th w={80}>S.No.</Table.Th>
-            <Table.Th w={180}>Pet Details</Table.Th>
-            <Table.Th w={150}>Applicant</Table.Th>
-            <Table.Th w={160}>Contact Info</Table.Th>
+            <Table.Th w={180}>Donor Name</Table.Th>
+            <Table.Th w={200}>Contact Info</Table.Th>
+            <Table.Th w={100}>Amount</Table.Th>
+            <Table.Th w={200}>Message</Table.Th>
             <Table.Th w={120}>Status</Table.Th>
           </Table.Tr>
         </Table.Thead>
@@ -113,10 +88,10 @@ export const Applications = () => {
             rows
           ) : (
             <Table.Tr>
-              <Table.Td colSpan={5}>
+              <Table.Td colSpan={6}>
                 <Flex direction="column" align="center">
                   <TbDatabaseOff size={24} />
-                  No records to show
+                  No donation records to show
                 </Flex>
               </Table.Td>
             </Table.Tr>

@@ -3,12 +3,14 @@ import { useNavigate } from "react-router-dom";
 import { axios } from "../../lib";
 import { AddSuccessStory } from "../../types";
 
-export const useGetAllSuccessStories = () => {
+export const useGetAllSuccessStories = ({ skip }: { skip: number }) => {
   return useQuery({
-    queryKey: ["Get-Success-Stories"],
+    queryKey: ["Get-Success-Stories", skip],
 
     queryFn: async () => {
-      const { data } = await axios.get("api/success-stories");
+      const { data } = await axios.get("api/success-stories", {
+        params: { skip },
+      });
       return data;
     },
   });

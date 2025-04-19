@@ -2,7 +2,11 @@ import { Box, Button } from "@mantine/core";
 import { useContext } from "react";
 import { IoDocumentTextOutline, IoPawOutline } from "react-icons/io5";
 import { LuHeartHandshake } from "react-icons/lu";
-import { MdOutlineDashboard, MdOutlineHome } from "react-icons/md";
+import {
+  MdOutlineDashboard,
+  MdOutlineHome,
+  MdOutlineVolunteerActivism,
+} from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../contexts";
 import { LinksGroup } from "./components/LinkGroups";
@@ -25,6 +29,11 @@ const links = [
     label: "Success Stories",
     icon: MdOutlineHome,
     pathName: "/success-stories",
+  },
+  {
+    label: "Donations",
+    icon: MdOutlineVolunteerActivism,
+    pathName: "/donations",
   },
 ];
 

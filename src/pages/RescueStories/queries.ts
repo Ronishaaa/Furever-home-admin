@@ -3,12 +3,14 @@ import { useNavigate } from "react-router-dom";
 import { axios } from "../../lib";
 import { AddRescueStory } from "../../types";
 
-export const useGetAllRescueStories = () => {
+export const useGetAllRescueStories = ({ skip }: { skip: number }) => {
   return useQuery({
-    queryKey: ["Get-Rescue-Stories"],
+    queryKey: ["Get-Rescue-Stories", skip],
 
     queryFn: async () => {
-      const { data } = await axios.get("api/rescue-stories");
+      const { data } = await axios.get("api/rescue-stories", {
+        params: { skip },
+      });
       return data;
     },
   });

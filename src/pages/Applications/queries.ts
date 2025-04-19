@@ -3,12 +3,14 @@ import { useNavigate } from "react-router-dom";
 import { axios } from "../../lib";
 import { Application } from "../../types";
 
-export const useGetAllApplications = () => {
+export const useGetAllApplications = ({ skip }: { skip: number }) => {
   return useQuery({
-    queryKey: ["Get-all-applications"],
+    queryKey: ["Get-all-applications", skip],
 
     queryFn: async () => {
-      const { data } = await axios.get("api/application");
+      const { data } = await axios.get("api/application", {
+        params: { skip },
+      });
       return data;
     },
   });
