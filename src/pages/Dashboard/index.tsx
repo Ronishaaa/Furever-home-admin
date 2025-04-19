@@ -1,4 +1,4 @@
-import { BarChart, DonutChart } from "@mantine/charts";
+import { BarChart, PieChart } from "@mantine/charts";
 import {
   Avatar,
   Badge,
@@ -120,6 +120,7 @@ export const Dashboard = () => {
           <Group mb="md">
             <Text fw={600}>Dog Status</Text>
           </Group>
+
           {isLoading ? (
             <Skeleton height={300} />
           ) : dogStatusData.every((d) => d.value === 0) ? (
@@ -127,8 +128,9 @@ export const Dashboard = () => {
               No dog status data available
             </Text>
           ) : (
-            <DonutChart
+            <PieChart
               data={dogStatusData}
+              withTooltip
               tooltipDataSource="segment"
               mx="auto"
             />
