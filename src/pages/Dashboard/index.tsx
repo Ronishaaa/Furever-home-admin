@@ -130,8 +130,10 @@ export const Dashboard = () => {
           ) : (
             <PieChart
               data={dogStatusData}
-              withTooltip
-              tooltipDataSource="segment"
+              withLabelsLine
+              labelsPosition="outside"
+              labelsType="value"
+              withLabels
               mx="auto"
             />
           )}

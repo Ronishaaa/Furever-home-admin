@@ -8,18 +8,20 @@ export const useGetPets = ({
   skip,
   sortBy,
   sortOrder,
+  adoptionStatus,
 }: {
   searchTerm: string | void;
   skip: number;
   sortBy: string;
   sortOrder: string;
+  adoptionStatus?: "Available" | "Pending" | "Adopted";
 }) => {
   return useQuery({
-    queryKey: ["Get-Pets", searchTerm, skip, sortBy, sortOrder],
+    queryKey: ["Get-Pets", searchTerm, skip, sortBy, sortOrder, adoptionStatus],
 
     queryFn: async () => {
       const { data } = await axios.get("api/pets", {
-        params: { searchTerm, skip, sortBy, sortOrder },
+        params: { searchTerm, skip, sortBy, sortOrder, adoptionStatus },
       });
       return data;
     },

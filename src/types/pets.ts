@@ -6,7 +6,6 @@ export interface AddPet {
   color?: string | null;
   gender: string;
   healthCondition?: string | null;
-  description?: string | null;
   vaccination: boolean;
   images?: string[];
   personality: string[];

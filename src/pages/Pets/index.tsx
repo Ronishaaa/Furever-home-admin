@@ -13,6 +13,7 @@ import {
   Pill,
   Stack,
   Table,
+  Tabs,
   Title,
   UnstyledButton,
 } from "@mantine/core";
@@ -32,14 +33,19 @@ export const Pets = () => {
   });
 
   const [skip, setSkip] = useState(0);
-
   const [activePage, setActivePage] = useState(1);
+
+  const [activeTab, setActiveTab] = useState<string | null>("All");
 
   const { data, isLoading, isFetching } = useGetPets({
     searchTerm,
     skip,
     sortBy: "createdAt",
     sortOrder: "asc",
+    adoptionStatus:
+      activeTab === "All"
+        ? undefined
+        : (activeTab as "Available" | "Pending" | "Adopted"),
   });
 
   const [selectedPet, setSelectedPet] = useState<number>();
@@ -150,6 +156,16 @@ export const Pets = () => {
           Add Pet
         </Button>
       </Flex>
+
+      <Tabs value={activeTab} onChange={setActiveTab}>
+        <Tabs.List>
+          <Tabs.Tab value="All">All</Tabs.Tab>
+          <Tabs.Tab value="Available">Available</Tabs.Tab>
+          <Tabs.Tab value="Pending">Pending</Tabs.Tab>
+          <Tabs.Tab value="Adopted">Adopted</Tabs.Tab>
+        </Tabs.List>
+      </Tabs>
+
       <Input
         w="100%"
         mt={14}
@@ -189,7 +205,7 @@ export const Pets = () => {
             rows
           ) : (
             <Table.Tr>
-              <Table.Td colSpan={5}>
+              <Table.Td colSpan={9}>
                 <Flex direction="column" align="center">
                   <TbDatabaseOff size={24} />
                   No records to show

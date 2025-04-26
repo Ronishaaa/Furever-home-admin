@@ -129,7 +129,7 @@ export const AddRescueStories = () => {
               <BiLeftArrowAlt size={20} />
             </Button>
 
-            <Title order={2}>Add New Rescue Story</Title>
+            <Title order={2}>Add Rescue Story</Title>
           </Group>
 
           <Group>

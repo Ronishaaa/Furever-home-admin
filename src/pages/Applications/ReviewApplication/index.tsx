@@ -272,16 +272,18 @@ export const ReviewApplication = () => {
           </Box>
         </Card>
 
-        <Flex justify="end" align="center" mb={32}>
-          <Group>
-            <Button variant="outline" onClick={cancelData}>
-              Cancel
-            </Button>
-            <Button h={40} type="submit">
-              Save changes
-            </Button>
-          </Group>
-        </Flex>
+        {data?.data.applicationStatus === "Pending" && (
+          <Flex justify="end" align="center" mb={32}>
+            <Group>
+              <Button variant="outline" onClick={cancelData}>
+                Cancel
+              </Button>
+              <Button h={40} type="submit">
+                Save changes
+              </Button>
+            </Group>
+          </Flex>
+        )}
 
         <Modal
           opened={showCancelModal}

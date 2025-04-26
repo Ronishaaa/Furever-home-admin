@@ -38,38 +38,23 @@ export const AddPets = () => {
 
   const [droppedImages, setDroppedImages] = useState<string[]>([]);
 
-  const { getInputProps, setFieldValue, onSubmit, isDirty, setFieldError } =
-    useForm<PetInput>({
-      initialValues: {
-        name: "",
-        adoptionStatus: "",
-        age: 0,
-        breed: "",
-        color: "",
-        gender: "",
-        healthCondition: "",
-        vaccination: false,
-        images: droppedImages,
-        personality: [],
-        energyLevel: "",
-        trainingLevel: "",
-        specialTraits: "",
-        adoptionInfo: {
-          idealHome: "",
-          childrenFriendly: false,
-          otherPetsFriendly: false,
-          experienceLevel: "",
-          specialNeeds: "",
-        },
-      },
-      validate: zodResolver(PetSchema),
-    });
-
+  const {
+    getInputProps,
+    setFieldValue,
+    onSubmit,
+    isDirty,
+    errors,
+    setFieldError,
+    values,
+  } = useForm<PetInput>({
+    validate: zodResolver(PetSchema),
+  });
+  console.log(values);
   const { mutate: addPetMutation, isSuccess, error } = useAddPet();
   const { mutateAsync: uploadImage } = useUploadImage();
 
   const addPet = async (values: AddPet) => {
-    addPetMutation(values);
+    addPetMutation({ ...values, adoptionStatus: "Available" });
   };
 
   useEffect(() => {
@@ -113,6 +98,16 @@ export const AddPets = () => {
     setDroppedImages(updatedImages);
     setFieldValue("images", updatedImages);
   };
+  console.log(errors);
+
+  useEffect(() => {
+    setFieldValue("vaccination", false);
+    setFieldValue("adoptionInfo", {
+      childrenFriendly: false,
+      otherPetsFriendly: false,
+      experienceLevel: "FirstTimeOwner",
+    });
+  }, []);
 
   return (
     <Container>
@@ -124,7 +119,7 @@ export const AddPets = () => {
               <BiLeftArrowAlt size={20} />
             </Button>
 
-            <Title order={2}>Add New Pet</Title>
+            <Title order={2}>Add Pet</Title>
           </Group>
 
           <Group>
@@ -141,15 +136,6 @@ export const AddPets = () => {
         <Grid grow gutter="sm">
           <Grid.Col span={4}>
             <TextInput label="Pet Name" mb={16} {...getInputProps("name")} />
-          </Grid.Col>
-
-          <Grid.Col span={4}>
-            <Select
-              label="Adoption Status"
-              data={["Available", "Pending"]}
-              mb={16}
-              {...getInputProps("adoptionStatus")}
-            />
           </Grid.Col>
         </Grid>
 
@@ -181,6 +167,7 @@ export const AddPets = () => {
         <Checkbox
           label="Vaccinated"
           mb={16}
+          defaultChecked={false}
           {...getInputProps("vaccination", { type: "checkbox" })}
         />
 
@@ -267,6 +254,7 @@ export const AddPets = () => {
             <Checkbox
               label="Other Pets Friendly"
               mb={16}
+              defaultChecked={false}
               {...getInputProps("adoptionInfo.otherPetsFriendly", {
                 type: "checkbox",
               })}
@@ -327,6 +315,11 @@ export const AddPets = () => {
             </Flex>
           )}
         </Dropzone>
+        {errors.images && (
+          <Text c="red" size="sm" mt={8}>
+            {errors.images}
+          </Text>
+        )}
 
         <Modal
           opened={showCancelModal}

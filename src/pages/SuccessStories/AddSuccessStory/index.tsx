@@ -119,7 +119,7 @@ export const AddSuccessStories = () => {
               <BiLeftArrowAlt size={20} />
             </Button>
 
-            <Title order={2}>Add New Success Story</Title>
+            <Title order={2}>Add Success Story</Title>
           </Group>
 
           <Group>

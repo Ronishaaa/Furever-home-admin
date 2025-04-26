@@ -125,7 +125,7 @@ export const SuccessStories = () => {
             rows
           ) : (
             <Table.Tr>
-              <Table.Td colSpan={5}>
+              <Table.Td colSpan={4}>
                 <Flex direction="column" align="center">
                   <TbDatabaseOff size={24} />
                   No records to show
