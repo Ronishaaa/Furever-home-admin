@@ -54,6 +54,7 @@ export const EditPets = () => {
     onSubmit,
     isDirty,
     reset,
+    errors,
   } = useForm<PetInput>({
     initialValues: {
       name: "",
@@ -80,14 +81,14 @@ export const EditPets = () => {
     },
     validate: zodResolver(PetSchema),
   });
-
+  console.log(errors);
   useEffect(() => {
     if (isSuccess && data) {
       setInitialValues({
         ...data.pet,
       });
       setDroppedImages(data?.pet?.images);
-      reset(); // reset the form state after updating initial values
+      reset();
     }
   }, [data, isSuccess, reset, setInitialValues]);
 
@@ -141,6 +142,7 @@ export const EditPets = () => {
     setDroppedImages(updatedImages);
     setFieldValue("images", updatedImages);
   };
+  console.log(data);
 
   return (
     <Box w={{ lg: 736 }} mx="auto">
@@ -169,15 +171,6 @@ export const EditPets = () => {
         <Grid grow gutter="sm">
           <Grid.Col span={4}>
             <TextInput label="Pet Name" mb={16} {...getInputProps("name")} />
-          </Grid.Col>
-
-          <Grid.Col span={4}>
-            <Select
-              label="Adoption Status"
-              data={["Available", "Pending"]}
-              mb={16}
-              {...getInputProps("adoptionStatus")}
-            />
           </Grid.Col>
         </Grid>
 

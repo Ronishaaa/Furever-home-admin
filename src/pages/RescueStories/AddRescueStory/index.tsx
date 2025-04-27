@@ -27,7 +27,7 @@ import { MdCalendarToday } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { AddRescueStory } from "../../../types";
 import { useAddRescueStories, useUploadImage } from "../queries";
-import { RescueStorySchema } from "../schema";
+import { RescueStoryInput, RescueStorySchema } from "../schema";
 
 export const AddRescueStories = () => {
   const navigate = useNavigate();
@@ -43,13 +43,8 @@ export const AddRescueStories = () => {
     isDirty,
     setFieldError,
     values,
-  } = useForm({
-    initialValues: {
-      title: "",
-      description: "",
-      rescueDate: undefined,
-      imageUrl: [] as string[],
-    },
+    errors,
+  } = useForm<RescueStoryInput>({
     validate: zodResolver(RescueStorySchema),
   });
 
@@ -145,8 +140,14 @@ export const AddRescueStories = () => {
 
         <TextInput label="Title" mb={16} {...getInputProps("title")} />
 
-        <Text>Story</Text>
-        <RichTextEditor editor={editor}>
+        <Text fw={600}>Story</Text>
+        <RichTextEditor
+          editor={editor}
+          style={{
+            border: errors.description ? "1px solid #fa5252" : "1px solid #ddd",
+            borderRadius: "4px",
+          }}
+        >
           <RichTextEditor.Toolbar sticky stickyOffset={60}>
             <RichTextEditor.ControlsGroup>
               <RichTextEditor.Bold />
@@ -177,6 +178,11 @@ export const AddRescueStories = () => {
 
           <RichTextEditor.Content __size="100px" />
         </RichTextEditor>
+        {errors.description && (
+          <Text c="red" size="sm" mt={8}>
+            {errors.description}
+          </Text>
+        )}
 
         <DateInput
           label="Rescue Date"
@@ -185,7 +191,7 @@ export const AddRescueStories = () => {
           {...getInputProps("rescueDate")}
         />
 
-        <Text>Image</Text>
+        <Text fw={600}>Image</Text>
 
         <Dropzone
           onDrop={handleDrop}
@@ -194,6 +200,10 @@ export const AddRescueStories = () => {
           maxSize={1 * 1024 ** 2}
           multiple
           styles={{ inner: { pointerEvents: "all" } }}
+          style={{
+            border: errors.imageUrl ? "1px dotted #fa5252" : "1px dotted #ddd",
+            borderRadius: "4px",
+          }}
         >
           {droppedImages.length > 0 ? (
             <Flex wrap="wrap" gap={2} className="z-50">
@@ -232,6 +242,11 @@ export const AddRescueStories = () => {
             </Flex>
           )}
         </Dropzone>
+        {errors.imageUrl && (
+          <Text c="red" size="sm" mt={8}>
+            {errors.imageUrl}
+          </Text>
+        )}
 
         <Modal
           opened={showCancelModal}

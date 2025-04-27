@@ -29,7 +29,7 @@ export const PetSchema = z.object({
 
   vaccination: z.boolean({ required_error: "Vaccination status is required" }),
 
-  adoptionStatus: z.string({ required_error: "Adoption status is required" }),
+  adoptionStatus: z.string().optional(),
 
   images: z.array(
     z.string({ invalid_type_error: "Each image must be a string URL" })

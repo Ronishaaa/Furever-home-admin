@@ -27,7 +27,7 @@ import { MdCalendarToday } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { AddSuccessStory } from "../../../types";
 import { useAddSuccessStories, useUploadImage } from "../queries";
-import { SuccessStorySchema } from "../schema";
+import { SuccessStoryInput, SuccessStorySchema } from "../schema";
 
 export const AddSuccessStories = () => {
   const navigate = useNavigate();
@@ -43,13 +43,8 @@ export const AddSuccessStories = () => {
     onSubmit,
     isDirty,
     setFieldError,
-  } = useForm({
-    initialValues: {
-      title: "",
-      description: "",
-      adoptionDate: undefined,
-      imageUrl: [] as string[],
-    },
+    errors,
+  } = useForm<SuccessStoryInput>({
     validate: zodResolver(SuccessStorySchema),
   });
 
@@ -109,6 +104,7 @@ export const AddSuccessStories = () => {
     content: values.description,
     onUpdate: ({ editor }) => setFieldValue("description", editor.getHTML()),
   });
+
   return (
     <Container>
       <LoadingOverlay />
@@ -135,8 +131,14 @@ export const AddSuccessStories = () => {
 
         <TextInput label="Title" mb={16} {...getInputProps("title")} />
 
-        <Text>Story</Text>
-        <RichTextEditor editor={editor}>
+        <Text fw={600}>Story</Text>
+        <RichTextEditor
+          editor={editor}
+          style={{
+            border: errors.description ? "1px solid #fa5252" : "1px solid #ddd",
+            borderRadius: "4px",
+          }}
+        >
           <RichTextEditor.Toolbar sticky stickyOffset={60}>
             <RichTextEditor.ControlsGroup>
               <RichTextEditor.Bold />
@@ -167,6 +169,11 @@ export const AddSuccessStories = () => {
 
           <RichTextEditor.Content __size="100px" />
         </RichTextEditor>
+        {errors.description && (
+          <Text c="red" size="sm" mt={8}>
+            {errors.description}
+          </Text>
+        )}
 
         <DateInput
           label="Adoption Date"
@@ -175,7 +182,7 @@ export const AddSuccessStories = () => {
           {...getInputProps("adoptionDate")}
         />
 
-        <Text>Image</Text>
+        <Text fw={600}>Image</Text>
 
         <Dropzone
           onDrop={handleDrop}
@@ -184,6 +191,10 @@ export const AddSuccessStories = () => {
           maxSize={1 * 1024 ** 2}
           styles={{ inner: { pointerEvents: "all" } }}
           multiple
+          style={{
+            border: errors.imageUrl ? "1px dotted #fa5252" : "1px dotted #ddd",
+            borderRadius: "4px",
+          }}
         >
           {droppedImages.length > 0 ? (
             <Flex wrap="wrap" gap={2}>
@@ -221,6 +232,11 @@ export const AddSuccessStories = () => {
             </Flex>
           )}
         </Dropzone>
+        {errors.imageUrl && (
+          <Text c="red" size="sm" mt={8}>
+            {errors.imageUrl}
+          </Text>
+        )}
 
         <Modal
           opened={showCancelModal}

@@ -1,6 +1,6 @@
 export interface AddPet {
   name: string;
-  adoptionStatus: string;
+  adoptionStatus?: string;
   age: number;
   breed: string;
   color?: string | null;
