@@ -5,6 +5,7 @@ import {
   Flex,
   Group,
   Image,
+  Loader,
   LoadingOverlay,
   Modal,
   Stack,
@@ -53,7 +54,7 @@ export const AddRescueStories = () => {
     isSuccess,
     error,
   } = useAddRescueStories();
-  const { mutateAsync: uploadImage } = useUploadImage();
+  const { mutateAsync: uploadImage, isPending } = useUploadImage();
 
   const AddRescueStory = async (values: AddRescueStory) => {
     AddRescueStoryMutation(values);
@@ -205,6 +206,23 @@ export const AddRescueStories = () => {
             borderRadius: "4px",
           }}
         >
+          {isPending && (
+            <Box
+              pos="absolute"
+              top={0}
+              left={0}
+              w="100%"
+              h="100%"
+              bg="rgba(255,255,255,0.6)"
+              display="flex"
+              style={{
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <Loader size="md" color="blue" />
+            </Box>
+          )}
           {droppedImages.length > 0 ? (
             <Flex wrap="wrap" gap={2} className="z-50">
               {droppedImages.map((src, index) => (

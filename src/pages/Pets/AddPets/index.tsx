@@ -7,6 +7,7 @@ import {
   Grid,
   Group,
   Image,
+  Loader,
   LoadingOverlay,
   Modal,
   MultiSelect,
@@ -45,13 +46,12 @@ export const AddPets = () => {
     isDirty,
     errors,
     setFieldError,
-    values,
   } = useForm<PetInput>({
     validate: zodResolver(PetSchema),
   });
-  console.log(values);
+
   const { mutate: addPetMutation, isSuccess, error } = useAddPet();
-  const { mutateAsync: uploadImage } = useUploadImage();
+  const { mutateAsync: uploadImage, isPending } = useUploadImage();
 
   const addPet = async (values: AddPet) => {
     addPetMutation({ ...values, adoptionStatus: "Available" });
@@ -98,7 +98,6 @@ export const AddPets = () => {
     setDroppedImages(updatedImages);
     setFieldValue("images", updatedImages);
   };
-  console.log(errors);
 
   useEffect(() => {
     setFieldValue("vaccination", false);
@@ -279,6 +278,23 @@ export const AddPets = () => {
           multiple
           styles={{ inner: { pointerEvents: "all" } }}
         >
+          {isPending && (
+            <Box
+              pos="absolute"
+              top={0}
+              left={0}
+              w="100%"
+              h="100%"
+              bg="rgba(255,255,255,0.6)"
+              display="flex"
+              style={{
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <Loader size="md" color="blue" />
+            </Box>
+          )}
           {droppedImages.length > 0 ? (
             <Flex wrap="wrap" gap={2}>
               {droppedImages.map((src, index) => (
@@ -315,6 +331,7 @@ export const AddPets = () => {
             </Flex>
           )}
         </Dropzone>
+
         {errors.images && (
           <Text c="red" size="sm" mt={8}>
             {errors.images}

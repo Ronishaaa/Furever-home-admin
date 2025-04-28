@@ -6,6 +6,7 @@ import {
   Grid,
   Group,
   Image,
+  Loader,
   LoadingOverlay,
   Modal,
   MultiSelect,
@@ -43,7 +44,7 @@ export const EditPets = () => {
 
   const { mutate: updatePet, isSuccess: updatedPet } = useUpdatePet();
 
-  const { mutateAsync: uploadImage } = useUploadImage();
+  const { mutateAsync: uploadImage, isPending } = useUploadImage();
 
   const [droppedImages, setDroppedImages] = useState<string[]>([]);
 
@@ -137,11 +138,12 @@ export const EditPets = () => {
   };
 
   const handleDelete = (index: number) => {
-    const updatedImages = droppedImages.filter((_, i) => i !== index);
-    setDroppedImages(updatedImages);
-    setFieldValue("images", updatedImages);
+    setDroppedImages((prevImages) => {
+      const updatedImages = prevImages.filter((_, i) => i !== index);
+      setFieldValue("images", updatedImages);
+      return updatedImages;
+    });
   };
-  console.log(data);
 
   return (
     <Box w={{ lg: 736 }} mx="auto">
@@ -315,6 +317,23 @@ export const EditPets = () => {
           multiple
           styles={{ inner: { pointerEvents: "all" } }}
         >
+          {isPending && (
+            <Box
+              pos="absolute"
+              top={0}
+              left={0}
+              w="100%"
+              h="100%"
+              bg="rgba(255,255,255,0.6)"
+              display="flex"
+              style={{
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <Loader size="md" color="blue" />
+            </Box>
+          )}
           {(droppedImages || []).length > 0 ? (
             <Flex wrap="wrap" gap={2}>
               {droppedImages.map((src, index) => (

@@ -5,6 +5,7 @@ import {
   Flex,
   Group,
   Image,
+  Loader,
   LoadingOverlay,
   Modal,
   Stack,
@@ -53,7 +54,7 @@ export const AddSuccessStories = () => {
     isSuccess,
     error,
   } = useAddSuccessStories();
-  const { mutateAsync: uploadImage } = useUploadImage();
+  const { mutateAsync: uploadImage, isPending } = useUploadImage();
   const AddSuccessStory = async (values: AddSuccessStory) => {
     AddSuccessStoryMutation(values);
   };
@@ -196,6 +197,23 @@ export const AddSuccessStories = () => {
             borderRadius: "4px",
           }}
         >
+          {isPending && (
+            <Box
+              pos="absolute"
+              top={0}
+              left={0}
+              w="100%"
+              h="100%"
+              bg="rgba(255,255,255,0.6)"
+              display="flex"
+              style={{
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <Loader size="md" color="blue" />
+            </Box>
+          )}
           {droppedImages.length > 0 ? (
             <Flex wrap="wrap" gap={2}>
               {droppedImages.map((src, index) => (
