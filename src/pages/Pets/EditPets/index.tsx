@@ -54,7 +54,6 @@ export const EditPets = () => {
     onSubmit,
     isDirty,
     reset,
-    errors,
   } = useForm<PetInput>({
     initialValues: {
       name: "",
@@ -81,7 +80,7 @@ export const EditPets = () => {
     },
     validate: zodResolver(PetSchema),
   });
-  console.log(errors);
+
   useEffect(() => {
     if (isSuccess && data) {
       setInitialValues({

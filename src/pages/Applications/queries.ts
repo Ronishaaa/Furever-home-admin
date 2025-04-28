@@ -3,13 +3,19 @@ import { useNavigate } from "react-router-dom";
 import { axios } from "../../lib";
 import { Application } from "../../types";
 
-export const useGetAllApplications = ({ skip }: { skip: number }) => {
+export const useGetAllApplications = ({
+  skip,
+  applicationStatus,
+}: {
+  skip: number;
+  applicationStatus?: "Pending" | "Approved" | "Rejected";
+}) => {
   return useQuery({
-    queryKey: ["Get-all-applications", skip],
+    queryKey: ["Get-all-applications", skip, applicationStatus],
 
     queryFn: async () => {
       const { data } = await axios.get("api/application", {
-        params: { skip },
+        params: { skip, applicationStatus },
       });
       return data;
     },

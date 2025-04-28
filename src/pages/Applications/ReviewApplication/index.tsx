@@ -16,6 +16,7 @@ import {
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
+import { Notifications } from "@mantine/notifications";
 import { useEffect, useState } from "react";
 import { BiLeftArrowAlt } from "react-icons/bi";
 import { useNavigate, useParams } from "react-router-dom";
@@ -93,6 +94,11 @@ export const ReviewApplication = () => {
     updateApplicationStatus({
       id: Number(id),
       values: values,
+    });
+    Notifications.show({
+      title: "Status Updated",
+      message: "Application status updated successfully!",
+      autoClose: false,
     });
   };
 

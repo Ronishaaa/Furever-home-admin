@@ -7,6 +7,7 @@ import {
   LoadingOverlay,
   Pagination,
   Table,
+  Tabs,
   Text,
   Title,
 } from "@mantine/core";
@@ -20,7 +21,15 @@ export const Applications = () => {
   const [skip, setSkip] = useState(0);
   const [activePage, setActivePage] = useState(1);
 
-  const { data, isLoading, isFetching } = useGetAllApplications({ skip });
+  const [activeTab, setActiveTab] = useState<string | null>("All");
+
+  const { data, isLoading, isFetching } = useGetAllApplications({
+    skip,
+    applicationStatus:
+      activeTab === "All"
+        ? undefined
+        : (activeTab as "Pending" | "Approved" | "Rejected"),
+  });
 
   const rows = data?.data.map(
     (
@@ -44,7 +53,7 @@ export const Applications = () => {
         style={{ cursor: "pointer" }}
         onClick={() => navigate(`/applications/${element.id}`)}
       >
-        <Table.Td>{index + 1}</Table.Td>
+        <Table.Td>{skip + index + 1}</Table.Td>
         <Table.Td>
           <Group gap="sm">
             <Avatar size={40} src={element.pet.images?.[0]} radius="sm" />
@@ -90,10 +99,26 @@ export const Applications = () => {
   return (
     <Container>
       <Flex justify="space-between" align="center" mb={24}>
-        <Title>Adoption Application</Title>
+        <Title>Adoption Applications</Title>
       </Flex>
 
-      <Table striped highlightOnHover>
+      <Tabs
+        value={activeTab}
+        onChange={(tab) => {
+          setActiveTab(tab);
+          setSkip(0);
+          setActivePage(1);
+        }}
+      >
+        <Tabs.List>
+          <Tabs.Tab value="All">All</Tabs.Tab>
+          <Tabs.Tab value="Pending">Pending</Tabs.Tab>
+          <Tabs.Tab value="Approved">Approved</Tabs.Tab>
+          <Tabs.Tab value="Rejected">Rejected</Tabs.Tab>
+        </Tabs.List>
+      </Tabs>
+
+      <Table striped highlightOnHover mt={14}>
         <Table.Thead>
           <Table.Tr>
             <Table.Th w={80}>S.No.</Table.Th>
